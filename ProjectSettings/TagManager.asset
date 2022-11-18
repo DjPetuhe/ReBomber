@@ -47,3 +47,6 @@ TagManager:
   - name: Breakable_Tilemap
     uniqueID: 851460717
     locked: 0
+  - name: Player
+    uniqueID: 1690066721
+    locked: 0
