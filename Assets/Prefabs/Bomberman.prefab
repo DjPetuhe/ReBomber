@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8540090240507558791}
   - component: {fileID: 8540090240507558808}
   - component: {fileID: 8540090240507558790}
+  - component: {fileID: -2454845705932693008}
   m_Layer: 0
   m_Name: Bomberman
   m_TagString: Untagged
@@ -161,3 +162,21 @@ MonoBehaviour:
   animator: {fileID: 8540090240507558808}
   rb2d: {fileID: 8540090240507558788}
   speed: 2.5
+--- !u!114 &-2454845705932693008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540090240507558786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0949c7bb3c7f31045b1e6c1fbc47eac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCollider: {fileID: 8540090240507558787}
+  bombPrefab: {fileID: 1739945974712528719, guid: 5bd5930e9b66459459a561dcbca478dd, type: 3}
+  placeBombKey: 32
+  bombCount: 1
+  bombsLeft: 0
+  fuseTimeSeconds: 5
