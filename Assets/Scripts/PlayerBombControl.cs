@@ -12,6 +12,8 @@ public class PlayerBombControl : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField]
     private GameObject bombPrefab;
+    [SerializeField]
+    private GameObject explosionPrefab;
 
     [Header("Keys")]
     [SerializeField]
@@ -22,6 +24,9 @@ public class PlayerBombControl : MonoBehaviour
     private int bombCount = 1;
     [SerializeField]
     private int bombsLeft;
+    [Range(2f,10f)]
+    [SerializeField]
+    private int explosionSize = 2;
     [Range(0f,10f)]
     [SerializeField]
     private float fuseTimeSeconds = 5f;
@@ -45,6 +50,12 @@ public class PlayerBombControl : MonoBehaviour
         yield return new WaitForSeconds(fuseTimeSeconds);
         Destroy(bomb);
         bombsLeft++;
+        pos = new(Mathf.Round(bomb.transform.position.x), Mathf.Round(bomb.transform.position.y));
+        GameObject explosion = Instantiate(explosionPrefab, pos, Quaternion.identity);
+        ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
+        explosionScript.ExplosionSize = explosionSize;
+        explosionScript.Depth = 0;
+        explosionScript.Explode();
     }
 
     private void OnTriggerExit2D(Collider2D bombCollider)

@@ -12,7 +12,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Map
   - 
   - 
   - 
@@ -47,6 +47,9 @@ TagManager:
     locked: 0
   - name: Breakable_Tilemap
     uniqueID: 851460717
+    locked: 0
+  - name: Explosion
+    uniqueID: 1723762205
     locked: 0
   - name: Bomb
     uniqueID: 1426837969
