@@ -17,6 +17,8 @@ public class LevelManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField]
     private GameObject playerPrefab;
+    [SerializeField]
+    private GameObject destroyingWallPrefab;
 
     [Header("Tilemaps")]
     [SerializeField]
@@ -57,8 +59,13 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    void Update()
+   public void DestroyWall(Vector2 position)
     {
-        
+        Vector3Int cell = breakableTilemap.WorldToCell(position);
+        if (breakableTilemap.GetTile(cell) != null)
+        {
+            breakableTilemap.SetTile(cell, null);
+            Instantiate(destroyingWallPrefab, position, Quaternion.identity);
+        }
     }
 }

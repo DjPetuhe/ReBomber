@@ -39,7 +39,7 @@ public class ExplosionController : MonoBehaviour
 
     public int ExplosionSize { get; set; }
 
-    public void Explode()
+    public void Explode(LevelManager level)
     {
         animator.SetInteger("Position", _position);
         List<(int, int)> directions = new() { (0, -1), (1, 0), (0, 1), (-1, 0) };
@@ -50,6 +50,7 @@ public class ExplosionController : MonoBehaviour
                 Vector2 pos = new(Mathf.Round(transform.position.x + directions[j].Item1 * i), Mathf.Round(transform.position.y + directions[j].Item2 * i));
                 if (Physics2D.OverlapBox(pos, Vector2.one / 2f, 0f, explosionLayerMask))
                 {
+                    level.DestroyWall(pos);
                     directions.Remove(directions[j]);
                     j--;
                 }

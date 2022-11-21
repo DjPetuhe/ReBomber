@@ -2533,7 +2533,7 @@ GameObject:
   - component: {fileID: 2142356617}
   m_Layer: 0
   m_Name: LevelManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2554,6 +2554,7 @@ MonoBehaviour:
   levelNumber: 0
   nextLevelNumber: 0
   playerPrefab: {fileID: 8540090240507558786, guid: db301a0219df55943bdd7a73246616cd, type: 3}
+  destroyingWallPrefab: {fileID: 8841588618937771872, guid: b0a8a7d93265afc4abc5a74b80a06172, type: 3}
   unbreakableTilemap: {fileID: 0}
   breakableTilemap: {fileID: 0}
   floorTile: {fileID: 11400000, guid: 5d2a431c891040a41ae7fb5d4ee344ac, type: 2}

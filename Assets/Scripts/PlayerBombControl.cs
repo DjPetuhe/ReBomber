@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 public class PlayerBombControl : MonoBehaviour
 {
+    private LevelManager levelManagerScript;
+
+    [Header("Colliders")]
     [SerializeField]
     private Collider2D playerCollider;
 
@@ -34,6 +37,7 @@ public class PlayerBombControl : MonoBehaviour
     private void OnEnable()
     {
         bombsLeft = bombCount;
+        levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
     }
 
     private void Update()
@@ -55,7 +59,7 @@ public class PlayerBombControl : MonoBehaviour
         ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
         explosionScript.ExplosionSize = explosionSize;
         explosionScript.Depth = 0;
-        explosionScript.Explode();
+        explosionScript.Explode(levelManagerScript);
     }
 
     private void OnTriggerExit2D(Collider2D bombCollider)
