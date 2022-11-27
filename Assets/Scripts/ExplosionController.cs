@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class ExplosionController : MonoBehaviour
 {
@@ -39,7 +36,7 @@ public class ExplosionController : MonoBehaviour
 
     public int ExplosionSize { get; set; }
 
-    public void Explode(LevelManager level)
+    public void Explode(TilemapManager map)
     {
         animator.SetInteger("Position", _position);
         List<(int, int)> directions = new() { (0, -1), (1, 0), (0, 1), (-1, 0) };
@@ -47,52 +44,45 @@ public class ExplosionController : MonoBehaviour
         {
             for (int j = 0; j < directions.Count; j++)
             {
-                Vector2 pos = new(Mathf.Round(transform.position.x + directions[j].Item1 * i), Mathf.Round(transform.position.y + directions[j].Item2 * i));
+                Vector2 pos = new(Mathf.Round(transform.position.x + directions[j].Item1 * i),
+                                  Mathf.Round(transform.position.y + directions[j].Item2 * i));
                 if (Physics2D.OverlapBox(pos, Vector2.one / 2f, 0f, explosionLayerMask))
                 {
-                    level.DestroyWall(pos);
+                    map.DestroyWall(pos);
                     directions.Remove(directions[j]);
                     j--;
                 }
                 else
                 {
-                    GameObject explosion = Instantiate(explosionPrefab, pos, Quaternion.identity);
+                    GameObject explosion = Instantiate(explosionPrefab, pos, ExplosionRotation(directions[j]));
                     ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
                     explosionScript.ExplosionSize = ExplosionSize;
                     explosionScript.Depth = Depth + i;
-                    explosionScript.ExplosionAdaptation(directions[j]);
+                    explosionScript.ExplosionSetUp();
                 }
             }
         }
     }
 
-    public void ExplosionAdaptation((int, int) direction)
+    private Quaternion ExplosionRotation((int, int) direction)
+    {
+        return direction switch
+        {
+            (1, 0) => Quaternion.Euler(0, 0, 90),
+            (0, 1) => Quaternion.Euler(0, 0, 180),
+            (-1, 0) => Quaternion.Euler(0, 0, 270),
+            _ => Quaternion.identity
+        };
+    }
+
+    public void ExplosionSetUp()
     {
         animator.SetInteger("Position", _position);
-        switch (_position)
+        explosionCollider.size = _position switch
         {
-            case 1:
-                explosionCollider.size = new Vector2(0.6f, 1);
-                break;
-            case 2:
-                explosionCollider.size = new Vector2(0.6f, 0.7f);
-                break;
-            default:
-                break;
-        }
-        switch (direction)
-        {
-            case (1, 0):
-                transform.rotation = Quaternion.Euler(0, 0, 90);
-                break;
-            case (0, 1):
-                transform.rotation = Quaternion.Euler(0, 0, 180);
-                break;
-            case (-1, 0):
-                transform.rotation = Quaternion.Euler(0, 0, 270);
-                break;
-            default:
-                break;
-        }
+            1 => new Vector2(0.6f, 1),
+            2 => new Vector2(0.6f, 0.7f),
+            _ => new Vector2(1f, 1f)
+        };
     }
 }

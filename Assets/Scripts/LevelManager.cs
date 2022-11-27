@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField]
-    private bool originalLevel;
+    public enum Difficulty
+    {
+        GodMod = 0,
+        Easy = 1,
+        Medium = 2,
+        Hard = 3
+    }
+    
+    [field: Header("Originality")]
+    [field: SerializeField]
+    public bool OriginalLevel { get; private set; }
 
     [Header("IDs")]
     [SerializeField]
@@ -14,58 +22,21 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private int nextLevelNumber;
 
-    [Header("Prefabs")]
-    [SerializeField]
-    private GameObject playerPrefab;
-    [SerializeField]
-    private GameObject destroyingWallPrefab;
-
-    [Header("Tilemaps")]
-    [SerializeField]
-    private Tilemap unbreakableTilemap;
-    [SerializeField]
-    private Tilemap breakableTilemap;
-
-    [Header("Tiles")]
-    [SerializeField]
-    private TileBase floorTile;
-    [SerializeField]
-    private TileBase exitTile;
-    [SerializeField]
-    private TileBase breakableWallTile;
-
-    [Header("Coordinates")]
-    [SerializeField]
-    private Vector3 startingCoords;
-    [SerializeField]
-    private Vector3 endingCoords;
+    [field: Header("Difficulty")]
+    [field: SerializeField]
+    public Difficulty GameDifficulty { get; private set; }
+    public int DifficultyInt 
+    { 
+        get { return (int) GameDifficulty; } 
+    }
 
     void Start()
     {
-        if (originalLevel)
-        {
-            unbreakableTilemap = GameObject.Find("UnbreakableTilemap").GetComponent<Tilemap>();
-            breakableTilemap = GameObject.Find("BreakableTilemap").GetComponent<Tilemap>();
-        }
-        else LoadLevel();
-        unbreakableTilemap.SetTile(unbreakableTilemap.WorldToCell(startingCoords), floorTile);
-        unbreakableTilemap.SetTile(unbreakableTilemap.WorldToCell(endingCoords), exitTile);
-        breakableTilemap.SetTile(breakableTilemap.WorldToCell(endingCoords), breakableWallTile);
-        Instantiate(playerPrefab, startingCoords, Quaternion.identity);
-    }
-
-    private void LoadLevel()
-    {
 
     }
 
-   public void DestroyWall(Vector2 position)
+    void Update()
     {
-        Vector3Int cell = breakableTilemap.WorldToCell(position);
-        if (breakableTilemap.GetTile(cell) != null)
-        {
-            breakableTilemap.SetTile(cell, null);
-            Instantiate(destroyingWallPrefab, position, Quaternion.identity);
-        }
+        
     }
 }

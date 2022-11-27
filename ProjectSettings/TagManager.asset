@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bomb
+  - VirtualCamera
   layers:
   - Default
   - TransparentFX
@@ -47,6 +48,9 @@ TagManager:
     locked: 0
   - name: Breakable_Tilemap
     uniqueID: 851460717
+    locked: 0
+  - name: Upgrade
+    uniqueID: 1527437613
     locked: 0
   - name: Explosion
     uniqueID: 1723762205

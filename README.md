@@ -11,4 +11,6 @@ Group: IP-01.
 ### Additional info:
 
 - Copied default .gitignore for Unity projects;
-- Textures was made by myself. Inspired by the original game.
+- Textures was made by myself. Inspired by the original game;
+- Music was made in free <a href="https://terrycavanagh.itch.io/bosca-ceoil">bosca ceoil music tool</a>;
+- Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=6225">Pixabay</a>

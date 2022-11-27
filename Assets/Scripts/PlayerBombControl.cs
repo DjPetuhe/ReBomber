@@ -1,12 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 public class PlayerBombControl : MonoBehaviour
 {
     private LevelManager levelManagerScript;
+    private TilemapManager tilemapManagerScript;
 
     [Header("Colliders")]
     [SerializeField]
@@ -27,17 +24,30 @@ public class PlayerBombControl : MonoBehaviour
     private int bombCount = 1;
     [SerializeField]
     private int bombsLeft;
+    [Range(0f, 10f)]
+    [SerializeField]
+    private float fuseTimeSeconds = 5f;
     [Range(2f,10f)]
     [SerializeField]
     private int explosionSize = 2;
-    [Range(0f,10f)]
-    [SerializeField]
-    private float fuseTimeSeconds = 5f;
+    public int ExplosionSize
+    {
+        get { return explosionSize; }
+        set
+        {
+            if (value > 2 && value < 10) explosionSize = value;
+        }
+    }
 
     private void OnEnable()
     {
-        bombsLeft = bombCount;
         levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        tilemapManagerScript = GameObject.Find("Map").GetComponent<TilemapManager>();
+        if (levelManagerScript.OriginalLevel)
+        {
+             //Load bombsCount and explosionSize from default   
+        }
+        bombsLeft = bombCount;
     }
 
     private void Update()
@@ -59,11 +69,20 @@ public class PlayerBombControl : MonoBehaviour
         ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
         explosionScript.ExplosionSize = explosionSize;
         explosionScript.Depth = 0;
-        explosionScript.Explode(levelManagerScript);
+        explosionScript.Explode(tilemapManagerScript);
     }
 
     private void OnTriggerExit2D(Collider2D bombCollider)
     {
         if (bombCollider.gameObject.CompareTag("Bomb")) bombCollider.isTrigger = false; 
+    }
+
+    public void AddBomb()
+    {
+        if (bombCount < 5)
+        {
+            bombCount++;
+            bombsLeft++;
+        }
     }
 }

@@ -1,11 +1,9 @@
+using Cinemachine;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     private const float epsilon = 0.001f;
-
-    [SerializeField]
-    private Transform bomberman;
 
     [SerializeField]
     private Animator animator;
@@ -16,7 +14,14 @@ public class PlayerMovement : MonoBehaviour
     [Range(0f, 10f)]
     [SerializeField]
     private float speed = 2.5f;
-
+    public float Speed
+    {
+        get { return speed; }
+        set
+        {
+            if (value > 0 && value < 10) speed = value;
+        }
+    }
     private Vector2 direction;
     private int _dir = 1;
     public int Dir
@@ -27,6 +32,11 @@ public class PlayerMovement : MonoBehaviour
             _dir = value;
             transform.localScale = _dir == 4 ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
         }
+    }
+
+    private void OnEnable()
+    {
+        GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform;
     }
 
     private int FindDirection()
