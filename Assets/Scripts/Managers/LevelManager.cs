@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public enum Difficulty
-    {
-        GodMod = 0,
-        Easy = 1,
-        Medium = 2,
-        Hard = 3
-    }
     
     [field: Header("Originality")]
     [field: SerializeField]
@@ -21,14 +14,6 @@ public class LevelManager : MonoBehaviour
     private int levelNumber;
     [SerializeField]
     private int nextLevelNumber;
-
-    [field: Header("Difficulty")]
-    [field: SerializeField]
-    public Difficulty GameDifficulty { get; private set; }
-    public int DifficultyInt 
-    { 
-        get { return (int) GameDifficulty; } 
-    }
 
     void Start()
     {
