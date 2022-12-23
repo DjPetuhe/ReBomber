@@ -11,7 +11,7 @@ public class MainMenuScript : MonoBehaviour
     }
     public void LoadLevelEditor()
     {
-        SceneManager.LoadScene("LevelEditorScene");
+        SceneManager.LoadScene("LevelEditorMenuScene");
     }
 
     public void LoadLastSession()
