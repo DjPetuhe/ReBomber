@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
@@ -13,7 +10,7 @@ public class DifficultyManager : MonoBehaviour
         Hard = 3
     }
 
-    private static DifficultyManager instance;
+    private static DifficultyManager s_instance;
 
     [field: Header("Difficulty")]
     [field: SerializeField]
@@ -25,7 +22,7 @@ public class DifficultyManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (s_instance is null) s_instance = this;
         else
         {
             Destroy(gameObject);

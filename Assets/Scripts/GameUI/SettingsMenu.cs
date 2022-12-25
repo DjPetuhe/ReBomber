@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using Difficulty = DifficultyManager.Difficulty;
 
 public class SettingsMenu : MonoBehaviour
@@ -21,18 +21,20 @@ public class SettingsMenu : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] Button saveButton;
 
-    private DifficultyManager difficultyManager;
+    private int _currentLevelRecordID;
+    private DifficultyManager _difficultyManager;
 
     private const float DEFAULT_SOUND_VOLUME = 0.5f;
     private const float DEFAULT_MUSIC_VOLUME = 0.1f;
     private const Difficulty DEFAULT_DIFFICULTY = Difficulty.Easy;
+    private const int DEFAULT_LEVEL_RECORD_ID = 5;
 
     private const string SOUND_KEY = "SoundVolume";
     private const string MUSIC_KEY = "MusicVolume";
 
     private void Awake()
     {
-        difficultyManager = GameObject.FindGameObjectsWithTag("DifficultyManager")[0]
+        _difficultyManager = GameObject.FindGameObjectsWithTag("DifficultyManager")[0]
                                       .GetComponent<DifficultyManager>();
     }
 
@@ -42,18 +44,24 @@ public class SettingsMenu : MonoBehaviour
     {
         PlayerPrefs prefs = SaveManager.LoadPreferences();
         if (prefs is null)
+        {
+            _currentLevelRecordID = DEFAULT_LEVEL_RECORD_ID;
             ConfigureSettings(DEFAULT_SOUND_VOLUME, DEFAULT_MUSIC_VOLUME, DEFAULT_DIFFICULTY);
+        }
         else
+        {
+            _currentLevelRecordID = prefs.RecordLevelID;
             ConfigureSettings(prefs.SoundVolume, prefs.MusicVolume, (Difficulty)prefs.Difficulty);
+        }
     }
 
     private void ConfigureSettings(float soundVol, float musicVol, Difficulty dif)
     {
-        difficultyManager.GameDifficulty = dif;
+        _difficultyManager.GameDifficulty = dif;
         SetDifficultyToggle(dif);
         soundSlider.value = soundVol;
         musicSlider.value = musicVol;
-        SaveButtonInteractable(false);
+        SaveSettings();
     }
 
     public void SetSoundVolume(float volume) => audioMixer.SetFloat(SOUND_KEY, Mathf.Log10(volume) * 20);
@@ -63,7 +71,7 @@ public class SettingsMenu : MonoBehaviour
     private void SetDifficulty(bool isOn, Difficulty dif)
     {
         if (!isOn) return;
-        difficultyManager.GameDifficulty = dif;
+        _difficultyManager.GameDifficulty = dif;
         SaveButtonInteractable(true);
     }
 
@@ -82,7 +90,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void SaveSettings()
     {
-        SaveManager.SavePreferences(soundSlider.value, musicSlider.value, difficultyManager.GameDifficulty);
+        SaveManager.SavePreferences(soundSlider.value, musicSlider.value, _difficultyManager.GameDifficulty, _currentLevelRecordID);
         SaveButtonInteractable(false);
     }
 

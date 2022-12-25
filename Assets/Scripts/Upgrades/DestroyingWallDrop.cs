@@ -1,37 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class DestroyingWallDrop : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject UpgradeBlastPrefab;
-    [SerializeField]
-    private GameObject UpgradeBombPrefab;
-    [SerializeField]
-    private GameObject UpgradeHpUpPrefab;
-    [SerializeField]
-    private GameObject UpgradeSpeedPrefab;
+    [Header("Upgrade prefabs")]
+    [SerializeField] GameObject UpgradeBlastPrefab;
+    [SerializeField] GameObject UpgradeBombPrefab;
+    [SerializeField] GameObject UpgradeHpUpPrefab;
+    [SerializeField] GameObject UpgradeSpeedPrefab;
 
-    [Header("DropChance")]
-    [SerializeField]
+    [Header("Drop chance")]
     [Range(0f, 1f)]
-    private double[] UpgradesChance;
+    [SerializeField] double[] UpgradesChance;
 
     [Header("Upgrades Coefficient")]
-    [SerializeField]
     [Range(1, 10)]
-    private int UpgradeBlastCoef;
-    [SerializeField]
+    [SerializeField] int UpgradeBlastCoef;
     [Range(1, 10)]
-    private int UpgradeBombCoef;
-    [SerializeField]
+    [SerializeField] int UpgradeBombCoef;
     [Range(1, 10)]
-    private int UpgradeHpUpCoef;
-    [SerializeField]
+    [SerializeField] int UpgradeHpUpCoef;
     [Range(1, 10)]
-    private int UpgradeSpeedCoef;
+    [SerializeField] int UpgradeSpeedCoef;
 
     private void OnDestroy()
     {   if (transform.position == GameObject.Find("Map").GetComponent<TilemapManager>().EndingCoords) return;
@@ -39,17 +29,15 @@ public class DestroyingWallDrop : MonoBehaviour
         int[] coefs = { UpgradeBlastCoef, UpgradeBombCoef, UpgradeHpUpCoef, UpgradeSpeedCoef };
         GameObject[] prefabs = { UpgradeBlastPrefab, UpgradeBombPrefab, UpgradeHpUpPrefab, UpgradeSpeedPrefab };
         int sum = coefs.Sum();
-        if (Random.value <= UpgradesChance[dif])
+        if (Random.value > UpgradesChance[dif]) return;
+        int randomCoef = Random.Range(0, sum);
+        for (int i = 0; i < coefs.Length; i++)
         {
-            int randomCoef = Random.Range(0, sum);
-            for (int i = 0; i < coefs.Length; i++)
+            if (randomCoef >= coefs[i]) randomCoef -= coefs[i];
+            else
             {
-                if (randomCoef >= coefs[i]) randomCoef -= coefs[i];
-                else
-                {
-                    Instantiate(prefabs[i], transform.position, Quaternion.identity);
-                    return;
-                }
+                Instantiate(prefabs[i], transform.position, Quaternion.identity);
+                return;
             }
         }
     }

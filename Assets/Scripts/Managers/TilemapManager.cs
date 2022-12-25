@@ -1,51 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class TilemapManager : MonoBehaviour
 {
-    private LevelManager levelManagerScript;
-
     [Header("ColliderEdge")]
-    [SerializeField]
-    private PolygonCollider2D mapCollider;
+    [SerializeField] PolygonCollider2D mapCollider;
 
     [Header("Prefabs")]
-    [SerializeField]
-    private GameObject playerPrefab;
-    [SerializeField]
-    private GameObject destroyingWallPrefab;
+    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject destroyingWallPrefab;
 
     [Header("Tilemaps")]
-    [SerializeField]
-    private Tilemap unbreakableTilemap;
-    [SerializeField]
-    private Tilemap breakableTilemap;
+    [SerializeField] Tilemap unbreakableTilemap;
+    [SerializeField] Tilemap breakableTilemap;
 
     [Header("Tiles")]
-    [SerializeField]
-    private TileBase floorTile;
-    [SerializeField]
-    private TileBase exitTile;
-    [SerializeField]
-    private TileBase breakableWallTile;
+    [SerializeField] TileBase floorTile;
+    [SerializeField] TileBase exitTile;
+    [SerializeField] TileBase breakableWallTile;
 
     [Header("Coordinates")]
-    [SerializeField]
-    private Vector3 startingCoords;
-    [SerializeField]
-    private Vector3 endingCoords;
+    [SerializeField] Vector3 startingCoords;
+    [SerializeField] Vector3 endingCoords;
     public Vector3 EndingCoords { get { return endingCoords; } }
-    [SerializeField]
-    private Vector2 leftTopCoords;
-    [SerializeField]
-    private Vector2 rightBottomCoords;
+    [SerializeField] Vector2 leftTopCoords;
+    [SerializeField] Vector2 rightBottomCoords;
+
+    private LevelManager _levelManagerScript;
 
     void Start()
     {
-        levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        if (levelManagerScript.OriginalLevel)
+        _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        if (_levelManagerScript.OriginalLevel)
         {
             unbreakableTilemap = GameObject.Find("UnbreakableTilemap").GetComponent<Tilemap>();
             breakableTilemap = GameObject.Find("BreakableTilemap").GetComponent<Tilemap>();
@@ -67,13 +53,13 @@ public class TilemapManager : MonoBehaviour
 
     private void LoadLevel()
     {
-
+        //TODO: Load Level from json (maybe by using level manager)
     }
 
    public void DestroyWall(Vector2 position)
     {
         Vector3Int cell = breakableTilemap.WorldToCell(position);
-        if (breakableTilemap.GetTile(cell) != null)
+        if (breakableTilemap.GetTile(cell) is not null)
         {
             breakableTilemap.SetTile(cell, null);
             Instantiate(destroyingWallPrefab, position, Quaternion.identity);

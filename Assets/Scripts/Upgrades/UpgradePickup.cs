@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradePickup : MonoBehaviour
@@ -13,8 +11,7 @@ public class UpgradePickup : MonoBehaviour
     }
 
     [Header("Upgrade Type")]
-    [SerializeField]
-    private UpgradeType type;
+    [SerializeField] UpgradeType type;
 
     private void OnTriggerEnter2D(Collider2D playerCollider)
     {
@@ -29,7 +26,7 @@ public class UpgradePickup : MonoBehaviour
                 player.GetComponent<PlayerBombControl>().AddBomb();
                 break;
             case UpgradeType.Hp:
-                //Add restore hp
+                //TODO: Add restore hp
                 break;
             case UpgradeType.Speed:
                 player.GetComponent<PlayerMovement>().Speed += 0.5f;

@@ -1,23 +1,19 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ExplosionController : MonoBehaviour
 {
     [Header("Layer Mask")]
-    [SerializeField]
-    private LayerMask explosionLayerMask;
+    [SerializeField] LayerMask explosionLayerMask;
 
     [Header("Prefab")]
-    [SerializeField]
-    private GameObject explosionPrefab;
+    [SerializeField] GameObject explosionPrefab;
 
     [Header("Animator")]
-    [SerializeField]
-    private Animator animator;
+    [SerializeField] Animator animator;
 
     [Header("Collider")]
-    [SerializeField]
-    private BoxCollider2D explosionCollider;
+    [SerializeField] BoxCollider2D explosionCollider;
 
     private int _position;
     private int _depth;

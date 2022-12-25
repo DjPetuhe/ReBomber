@@ -3,26 +3,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private const float epsilon = 0.001f;
+    [Header("Player animator")]
+    [SerializeField] Animator animator;
 
-    [SerializeField]
-    private Animator animator;
+    [Header("Player rigidbody")]
+    [SerializeField] Rigidbody2D rb2d;
 
-    [SerializeField]
-    private Rigidbody2D rb2d;
-
+    [Header("Player params")]
     [Range(0f, 10f)]
-    [SerializeField]
-    private float speed = 2.5f;
+    [SerializeField] float speed = 2.5f;
     public float Speed
     {
         get { return speed; }
-        set
-        {
-            if (value > 0 && value < 10) speed = value;
-        }
+        set { if (value > 0 && value < 10) speed = value; }
     }
-    private Vector2 direction;
+
+    private Vector2 _direction;
     private int _dir = 1;
     public int Dir
     {
@@ -33,36 +29,36 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = _dir == 4 ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
         }
     }
+    
+    private const float EPSILON = 0.001f;
 
     private void OnEnable()
     {
-        GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform;
+        GameObject virtualCamera = GameObject.FindGameObjectWithTag("VirtualCamera");
+        virtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform;
     }
 
     private int FindDirection()
     {
-        if (direction.sqrMagnitude > epsilon)
+        if (_direction.sqrMagnitude > EPSILON)
         {
-            if (direction.x > direction.y) Dir = (direction.x > -direction.y) ? 2 : 1;
-            else Dir = (direction.x < -direction.y) ? 4 : 3;
+            if (_direction.x > _direction.y) Dir = (_direction.x > -_direction.y) ? 2 : 1;
+            else Dir = (_direction.x < -_direction.y) ? 4 : 3;
         }
         return Dir;
     }
 
     void Update()
     {
-        direction.x = Input.GetAxisRaw("Horizontal");
-        direction.y = Input.GetAxisRaw("Vertical");
-        direction.Normalize();
+        _direction.x = Input.GetAxisRaw("Horizontal");
+        _direction.y = Input.GetAxisRaw("Vertical");
+        _direction.Normalize();
 
-        animator.SetFloat("Horizontal", direction.x);
-        animator.SetFloat("Vertical", direction.y);
-        animator.SetFloat("Speed", direction.magnitude);
+        animator.SetFloat("Horizontal", _direction.x);
+        animator.SetFloat("Vertical", _direction.y);
+        animator.SetFloat("Speed", _direction.magnitude);
         animator.SetInteger("Direction", FindDirection());
     }
 
-    private void FixedUpdate()
-    {
-        rb2d.MovePosition(rb2d.position + speed * Time.fixedDeltaTime * direction);
-    }
+    private void FixedUpdate() => rb2d.MovePosition(rb2d.position + speed * Time.fixedDeltaTime * _direction);
 }

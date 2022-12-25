@@ -1,19 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: transition between levels, probably singleton.
 public class LevelManager : MonoBehaviour
 {
-    
     [field: Header("Originality")]
     [field: SerializeField]
     public bool OriginalLevel { get; private set; }
 
     [Header("IDs")]
-    [SerializeField]
-    private int levelNumber;
-    [SerializeField]
-    private int nextLevelNumber;
+    [SerializeField] int levelNumber;
+    [SerializeField] int nextLevelNumber;
 
     void Start()
     {

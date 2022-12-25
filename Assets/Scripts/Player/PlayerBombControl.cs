@@ -1,51 +1,42 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
+
 public class PlayerBombControl : MonoBehaviour
 {
-    private LevelManager levelManagerScript;
-    private TilemapManager tilemapManagerScript;
-
     [Header("Colliders")]
-    [SerializeField]
-    private Collider2D playerCollider;
+    [SerializeField] Collider2D playerCollider;
 
     [Header("Prefabs")]
-    [SerializeField]
-    private GameObject bombPrefab;
-    [SerializeField]
-    private GameObject explosionPrefab;
+    [SerializeField] GameObject bombPrefab;
+    [SerializeField] GameObject explosionPrefab;
 
     [Header("Keys")]
-    [SerializeField]
-    private KeyCode placeBombKey = KeyCode.Space;
+    [SerializeField] KeyCode placeBombKey = KeyCode.Space;
 
     [Header("Characteristics")]
-    [SerializeField]
-    private int bombCount = 1;
-    [SerializeField]
-    private int bombsLeft;
+    [SerializeField] int bombCount = 1;
+    [SerializeField] int bombsLeft;
     [Range(0f, 10f)]
-    [SerializeField]
-    private float fuseTimeSeconds = 5f;
+    [SerializeField] float fuseTimeSeconds = 5f;
     [Range(2f,10f)]
-    [SerializeField]
-    private int explosionSize = 2;
+    [SerializeField] int explosionSize = 2;
+
+    private LevelManager _levelManagerScript;
+    private TilemapManager _tilemapManagerScript;
+
     public int ExplosionSize
     {
         get { return explosionSize; }
-        set
-        {
-            if (value > 2 && value < 10) explosionSize = value;
-        }
+        set { if (value > 2 && value < 10) explosionSize = value; }
     }
 
     private void OnEnable()
     {
-        levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        tilemapManagerScript = GameObject.Find("Map").GetComponent<TilemapManager>();
-        if (levelManagerScript.OriginalLevel)
+        _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        _tilemapManagerScript = GameObject.Find("Map").GetComponent<TilemapManager>();
+        if (_levelManagerScript.OriginalLevel)
         {
-             //Load bombsCount and explosionSize from default   
+             //TODO: Load bombsCount and explosionSize from default   
         }
         bombsLeft = bombCount;
     }
@@ -69,7 +60,7 @@ public class PlayerBombControl : MonoBehaviour
         ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
         explosionScript.ExplosionSize = explosionSize;
         explosionScript.Depth = 0;
-        explosionScript.Explode(tilemapManagerScript);
+        explosionScript.Explode(_tilemapManagerScript);
     }
 
     private void OnTriggerExit2D(Collider2D bombCollider)

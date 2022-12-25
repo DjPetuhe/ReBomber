@@ -5,26 +5,26 @@ using Difficulty = DifficultyManager.Difficulty;
 
 public static class SaveManager
 {
-    private static readonly string preferencePath = Application.persistentDataPath + "/preference.pr";
+    private static readonly string s_preferencePath = Application.persistentDataPath + "/preference.pr";
 
-    public static void SavePreferences(float soundVolume, float musicVolume, Difficulty difficulty)
+    public static void SavePreferences(float soundVolume, float musicVolume, Difficulty difficulty, int recordLevelID)
     {
         BinaryFormatter formatter = new();
-        FileStream stream = new(preferencePath, FileMode.OpenOrCreate, FileAccess.Write)
+        FileStream stream = new(s_preferencePath, FileMode.OpenOrCreate, FileAccess.Write)
         {
             Position = 0
         };
-        PlayerPrefs preferences = new(soundVolume, musicVolume, (int)difficulty);
+        PlayerPrefs preferences = new(soundVolume, musicVolume, (int)difficulty, recordLevelID);
         formatter.Serialize(stream, preferences);
         stream.Close();
     }
 
     public static PlayerPrefs LoadPreferences()
     {
-        if (File.Exists(preferencePath))
+        if (File.Exists(s_preferencePath))
         {
             BinaryFormatter formatter = new();
-            FileStream stream = new(preferencePath, FileMode.Open, FileAccess.Read)
+            FileStream stream = new(s_preferencePath, FileMode.Open, FileAccess.Read)
             {
                 Position = 0
             };
@@ -32,7 +32,7 @@ public static class SaveManager
             stream.Close();
             return preferences;
         }
-        else Debug.Log($"Save file not found in {preferencePath}!");
+        else Debug.Log($"Save file not found in {s_preferencePath}!");
         return null;
     }
 }
