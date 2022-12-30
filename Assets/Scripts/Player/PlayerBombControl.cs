@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using GameState = GameManager.GameState;
+using PlayerState = PlayerHealthControl.PlayerState;
 
 public class PlayerBombControl : MonoBehaviour
 {
@@ -14,36 +16,37 @@ public class PlayerBombControl : MonoBehaviour
     [SerializeField] KeyCode placeBombKey = KeyCode.Space;
 
     [Header("Characteristics")]
-    [SerializeField] int bombCount = 1;
-    [SerializeField] int bombsLeft;
     [Range(0f, 10f)]
     [SerializeField] float fuseTimeSeconds = 5f;
     [Range(2f,10f)]
     [SerializeField] int explosionSize = 2;
-
-    private LevelManager _levelManagerScript;
-    private TilemapManager _tilemapManagerScript;
-
     public int ExplosionSize
     {
         get { return explosionSize; }
-        set { if (value > 2 && value < 10) explosionSize = value; }
+        set { if (value > 2 && value < MAX_EXPLOSION_SIZE) explosionSize = value; }
     }
+
+    private GameManager _gameManager;
+    private TilemapManager _tilemapManager;
+    private PlayerHealthControl _playerHealthControl;
+
+    private int _bombsLeft;
+
+    private const int MAX_EXPLOSION_SIZE = 10;
 
     private void OnEnable()
     {
-        _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        _tilemapManagerScript = GameObject.Find("Map").GetComponent<TilemapManager>();
-        if (_levelManagerScript.OriginalLevel)
-        {
-             //TODO: Load bombsCount and explosionSize from default   
-        }
-        bombsLeft = bombCount;
+        _tilemapManager = GameObject.Find("Map").GetComponent<TilemapManager>();
+        _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        _playerHealthControl = GetComponent<PlayerHealthControl>();
+        _bombsLeft = _gameManager.BombsCount;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(placeBombKey) && bombsLeft > 0) StartCoroutine(PlaceBomb());
+        if (_playerHealthControl.State == PlayerState.Dead) return;
+        if (_gameManager.State == GameState.Pause || _gameManager.State == GameState.GameOver) return;
+        if (Input.GetKeyDown(placeBombKey) && _bombsLeft > 0) StartCoroutine(PlaceBomb());
     }
 
     private IEnumerator PlaceBomb()
@@ -51,16 +54,16 @@ public class PlayerBombControl : MonoBehaviour
         Vector2 offset = playerCollider.offset;
         Vector2 pos = new (Mathf.Round(transform.position.x + offset.x), Mathf.Round(transform.position.y + offset.y));
         GameObject bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
-        bombsLeft--;
+        _bombsLeft--;
         yield return new WaitForSeconds(fuseTimeSeconds);
         Destroy(bomb);
-        bombsLeft++;
+        _bombsLeft++;
         pos = new(Mathf.Round(bomb.transform.position.x), Mathf.Round(bomb.transform.position.y));
         GameObject explosion = Instantiate(explosionPrefab, pos, Quaternion.identity);
         ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
         explosionScript.ExplosionSize = explosionSize;
         explosionScript.Depth = 0;
-        explosionScript.Explode(_tilemapManagerScript);
+        explosionScript.Explode(_tilemapManager);
     }
 
     private void OnTriggerExit2D(Collider2D bombCollider)
@@ -70,10 +73,10 @@ public class PlayerBombControl : MonoBehaviour
 
     public void AddBomb()
     {
-        if (bombCount < 5)
+        if (_gameManager.BombsCount < GameManager.MAX_BOMB)
         {
-            bombCount++;
-            bombsLeft++;
+            _gameManager.BombsCount++;
+            _bombsLeft++;
         }
     }
 }

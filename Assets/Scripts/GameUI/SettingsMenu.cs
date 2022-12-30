@@ -34,8 +34,7 @@ public class SettingsMenu : MonoBehaviour
 
     private void Awake()
     {
-        _difficultyManager = GameObject.FindGameObjectsWithTag("DifficultyManager")[0]
-                                      .GetComponent<DifficultyManager>();
+        _difficultyManager = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>();
     }
 
     public void Start() => LoadSettingsPreferences();
@@ -60,7 +59,9 @@ public class SettingsMenu : MonoBehaviour
         _difficultyManager.GameDifficulty = dif;
         SetDifficultyToggle(dif);
         soundSlider.value = soundVol;
+        SetSoundVolume(soundVol);
         musicSlider.value = musicVol;
+        SetMusicVolume(musicVol);
         SaveSettings();
     }
 

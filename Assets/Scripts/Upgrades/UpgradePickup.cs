@@ -29,7 +29,7 @@ public class UpgradePickup : MonoBehaviour
                 //TODO: Add restore hp
                 break;
             case UpgradeType.Speed:
-                player.GetComponent<PlayerMovement>().Speed += 0.5f;
+                player.GetComponent<PlayerMovement>().SpeedUpBy(0.5f);
                 break;
         }
         Destroy(gameObject);

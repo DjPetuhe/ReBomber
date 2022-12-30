@@ -13,6 +13,10 @@ public class LevelsMenu : MonoBehaviour
     [SerializeField] Button originalButton;
     [SerializeField] Button customButton;
 
+    [Header("Scrollbars")]
+    [SerializeField] Scrollbar originalScrollbar;
+    [SerializeField] Scrollbar customScrollbar;
+
     [Header("Menu Image")]
     [SerializeField] Sprite originalMenu;
     [SerializeField] Sprite customMenu;
@@ -45,6 +49,8 @@ public class LevelsMenu : MonoBehaviour
     {
         LoadOriginalLevels();
         LoadCustomLevels();
+        originalScrollbar.value = 0;
+        customScrollbar.value = 0;
     }
 
     private void LoadOriginalLevels() => LoadLevels(true, LAST_LEVEL_ID - FIRST_LEVEL_ID + 1);

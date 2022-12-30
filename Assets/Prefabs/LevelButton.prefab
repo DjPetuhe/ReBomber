@@ -153,6 +153,7 @@ MonoBehaviour:
   numberText: {fileID: 6284775696966852345}
   nameText: {fileID: 6284775697260811148}
   difficultyImage: {fileID: 6284775697478935904}
+  gameManagerPrefab: {fileID: 4584422579586143911, guid: 58b486d49b5e6f4499ce006a8f05c5bb, type: 3}
 --- !u!1 &6284775696966852345
 GameObject:
   m_ObjectHideFlags: 0

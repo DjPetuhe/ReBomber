@@ -15,10 +15,7 @@ public class DifficultyManager : MonoBehaviour
     [field: Header("Difficulty")]
     [field: SerializeField]
     public Difficulty GameDifficulty { get; set; }
-    public int DifficultyInt
-    {
-        get { return (int)GameDifficulty; }
-    }
+    public int DifficultyInt { get { return (int)GameDifficulty; } }
 
     private void Awake()
     {

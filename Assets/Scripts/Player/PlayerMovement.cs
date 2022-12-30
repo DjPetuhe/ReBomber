@@ -1,5 +1,7 @@
 using Cinemachine;
 using UnityEngine;
+using GameState = GameManager.GameState;
+using PlayerState = PlayerHealthControl.PlayerState;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,16 +11,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player rigidbody")]
     [SerializeField] Rigidbody2D rb2d;
 
-    [Header("Player params")]
-    [Range(0f, 10f)]
-    [SerializeField] float speed = 2.5f;
-    public float Speed
-    {
-        get { return speed; }
-        set { if (value > 0 && value < 10) speed = value; }
-    }
+    private GameManager _gameManager;
+    private PlayerHealthControl _playerHealthControl;
 
-    private Vector2 _direction;
     private int _dir = 1;
     public int Dir
     {
@@ -29,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = _dir == 4 ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
         }
     }
+
+    private Vector2 _direction;
     
     private const float EPSILON = 0.001f;
 
@@ -36,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GameObject virtualCamera = GameObject.FindGameObjectWithTag("VirtualCamera");
         virtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform;
+        _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        _playerHealthControl = GetComponent<PlayerHealthControl>();
     }
 
     private int FindDirection()
@@ -48,17 +47,31 @@ public class PlayerMovement : MonoBehaviour
         return Dir;
     }
 
-    void Update()
+    private void Update()
     {
+        if (_playerHealthControl.State == PlayerState.Dead) return;
+        if (_gameManager.State == GameState.Pause || _gameManager.State == GameState.GameOver) return;
         _direction.x = Input.GetAxisRaw("Horizontal");
         _direction.y = Input.GetAxisRaw("Vertical");
         _direction.Normalize();
+        ConfigureAnimator();
+    }
 
+    public void ConfigureAnimator()
+    {
         animator.SetFloat("Horizontal", _direction.x);
         animator.SetFloat("Vertical", _direction.y);
         animator.SetFloat("Speed", _direction.magnitude);
         animator.SetInteger("Direction", FindDirection());
     }
 
-    private void FixedUpdate() => rb2d.MovePosition(rb2d.position + speed * Time.fixedDeltaTime * _direction);
+    public void StopMovement()
+    {
+        _direction = new(0, 0);
+        ConfigureAnimator();
+    }
+
+    private void FixedUpdate() => rb2d.MovePosition(rb2d.position + _gameManager.Speed * Time.fixedDeltaTime * _direction);
+
+    public void SpeedUpBy(float speedUp) => _gameManager.Speed += speedUp;
 }

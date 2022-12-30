@@ -8,6 +8,9 @@ TagManager:
   - VirtualCamera
   - DifficultyManager
   - AudioManager
+  - GameManager
+  - Explosion
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Map
-  - 
+  - Particle
   - 
   - 
   - 
@@ -62,4 +65,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 1690066721
+    locked: 0
+  - name: Particle
+    uniqueID: 486488057
     locked: 0

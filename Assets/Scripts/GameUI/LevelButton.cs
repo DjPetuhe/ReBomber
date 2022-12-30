@@ -14,6 +14,9 @@ public class LevelButton : MonoBehaviour
     [SerializeField] GameObject nameText;
     [SerializeField] Image difficultyImage;
 
+    [Header("Prefabs")]
+    [SerializeField] GameObject gameManagerPrefab;
+
     private static readonly Color32 s_easyDifficultyColor = new(40, 255, 0, 255);
     private static readonly Color32 s_mediumDifficultyColor = new(230, 255, 0, 255);
     private static readonly Color32 s_hardDifficultyColor = new(255, 0, 0, 255);
@@ -64,6 +67,7 @@ public class LevelButton : MonoBehaviour
             Debug.Log($"Can't load level scene with ID {_levelSceneIndex}!");
             return;
         }
+        Instantiate(gameManagerPrefab);
         SceneManager.LoadScene(_levelSceneIndex);
     }
 
