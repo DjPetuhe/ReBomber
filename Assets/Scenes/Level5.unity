@@ -630,7 +630,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7783251, y: 1}
+    m_SensorSize: {x: 1.7794871, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3177,11 +3177,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapCollider: {fileID: 2004521865}
   playerPrefab: {fileID: 8540090240507558786, guid: db301a0219df55943bdd7a73246616cd, type: 3}
+  redSlimePrefab: {fileID: 7876416176157421754, guid: 5175957363114794b81089d984be5bd6, type: 3}
+  blueSlimePrefab: {fileID: 1020000260179496135, guid: 86d32c6320d04aa4a9163ffbae4712d6, type: 3}
+  yellowSlimePrefab: {fileID: 1518649786758170945, guid: 05799b31c9cd39847ba279a88e45deee, type: 3}
+  purpleSlimePrefab: {fileID: 8225679227898635985, guid: 36a6da3327d80b9418dff4c25ef4479b, type: 3}
   destroyingWallPrefab: {fileID: 8841588618937771872, guid: b0a8a7d93265afc4abc5a74b80a06172, type: 3}
   nextLevelTriggerPrefab: {fileID: 9209608605966835560, guid: 65ebe249af66c69479bf8bc73e6de0d4, type: 3}
   floorTile: {fileID: 11400000, guid: 5d2a431c891040a41ae7fb5d4ee344ac, type: 2}
   exitTile: {fileID: 11400000, guid: d1d2827abea6d6740b45e59cc3948bd1, type: 2}
   breakableWallTile: {fileID: 11400000, guid: 03044f56e23682e40954ac04b2df38b8, type: 2}
+  finishTile: {fileID: 11400000, guid: f186646c0f85dfd41ae78ca884ccb09c, type: 2}
+  startTile: {fileID: 11400000, guid: 4af66ecb0832fc64983396ccabd23083, type: 2}
+  redSlimeTile: {fileID: 11400000, guid: 742b7c8b00ce4374a94910153b5bb1f4, type: 2}
+  purpleSlimeTile: {fileID: 11400000, guid: 06b3a74b37682924ca723b55f88d6150, type: 2}
+  yellowSlimeTile: {fileID: 11400000, guid: 15b6b12e7f41d284fbfc01eec9499f64, type: 2}
+  blueSlimeTile: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}
   startingCoords: {x: -7, y: 1, z: 0}
   endingCoords: {x: 2, y: 0, z: 0}
   leftTopCoords: {x: -9, y: 4}

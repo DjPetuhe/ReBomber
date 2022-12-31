@@ -39,7 +39,6 @@ public class TilemapManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"start Test");
         _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         if (_levelManagerScript.OriginalLevel)
         {
@@ -96,7 +95,6 @@ public class TilemapManager : MonoBehaviour
 
     private void SummonPrefab(GameObject prefab, Vector3Int pos)
     {
-        Debug.Log("test");
         Instantiate(prefab, pos, Quaternion.identity);
         _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), floorTile);
     }
