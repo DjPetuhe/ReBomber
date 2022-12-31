@@ -39,6 +39,7 @@ public class TilemapManager : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log($"start Test");
         _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         if (_levelManagerScript.OriginalLevel)
         {
@@ -69,13 +70,13 @@ public class TilemapManager : MonoBehaviour
 
     private void ReplaceAuxiliaryTiles()
     {
-        for (int i = Mathf.RoundToInt(leftTopCoords.y); i < Mathf.RoundToInt(rightBottomCoords.y); i++)
+        for (int i = Mathf.RoundToInt(rightBottomCoords.y); i <= Mathf.RoundToInt(leftTopCoords.y); i++)
         {
-            for (int j = Mathf.RoundToInt(leftTopCoords.x); j < Mathf.RoundToInt(leftTopCoords.y); j++)
+            for (int j = Mathf.RoundToInt(leftTopCoords.x); j <= Mathf.RoundToInt(rightBottomCoords.x); j++)
             {
-                Vector3Int pos = new Vector3Int(i, j, 0);
-                TileBase breakableTile = _breakableTilemap.GetTile(pos);
-                TileBase unbreakableTile = _unbreakableTilemap.GetTile(pos);
+                Vector3Int pos = new Vector3Int(j, i, 0);
+                TileBase breakableTile = _breakableTilemap.GetTile(_breakableTilemap.WorldToCell(pos));
+                TileBase unbreakableTile = _unbreakableTilemap.GetTile(_unbreakableTilemap.WorldToCell(pos));
                 if (unbreakableTile == null) continue;
                 else if (unbreakableTile == startTile) SummonPrefab(playerPrefab, pos);
                 else if (unbreakableTile == redSlimeTile) SummonPrefab(redSlimePrefab, pos);
@@ -95,6 +96,7 @@ public class TilemapManager : MonoBehaviour
 
     private void SummonPrefab(GameObject prefab, Vector3Int pos)
     {
+        Debug.Log("test");
         Instantiate(prefab, pos, Quaternion.identity);
         _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), floorTile);
     }
