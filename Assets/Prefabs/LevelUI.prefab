@@ -392,8 +392,9 @@ MonoBehaviour:
   pauseButton: {fileID: 3298951202425099619}
   resumeButton: {fileID: 3298951202600997653}
   panel: {fileID: 3298951201081635076}
+  endGameText: {fileID: 3298951202019336929}
   gameOverUI: {fileID: 3298951201203909128}
-  PauseKey: 27
+  pauseKey: 0
 --- !u!1 &3298951201460978568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1153,7 +1154,7 @@ GameObject:
   - component: {fileID: 3298951202019336988}
   - component: {fileID: 3298951202019336991}
   m_Layer: 5
-  m_Name: GameOverText
+  m_Name: EndGameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

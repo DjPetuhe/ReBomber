@@ -683,6 +683,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Red_slime_tile
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 64
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d73b60cd96512a4baa7108df0e03d4a
+      internalID: 632867320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Blue_sime_tile
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 43
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b64cf2bd195974a43997126a280d498b
+      internalID: -491865741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Yellow_slime_tile
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 22
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ef213480142f3545aa7f316b93af793
+      internalID: -1598147166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Purple_slime_tile
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 1
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbe8d576fc4f1b549ac68d93e59a2fb1
+      internalID: 241482239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -694,6 +778,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Blue_sime_tile: -491865741
+      Purple_slime_tile: 241482239
       end_blast_sprite1: 365698080
       exploded_wall_sprite2: -784614081
       center_blast_sprite1: 1313416113
@@ -705,6 +791,7 @@ TextureImporter:
       exit_floor_title: 1337055313
       breakable_wall_tile: 1363369207
       center_blast_sprite2: 578712543
+      Yellow_slime_tile: -1598147166
       speed_powerup_sprite: -237436087
       bomb_powerup_sprite: 1541139347
       finish_wall_tile: 1928408059
@@ -712,6 +799,7 @@ TextureImporter:
       end_blast_sprite0: 159489812
       expanded_bomb_sprite: 1995598805
       side_blast_sprite2: 974447577
+      Red_slime_tile: 632867320
       health_powerup_sprite: 2111475145
       side_blast_sprite0: -633495248
       green_floor_tile: 1969259816

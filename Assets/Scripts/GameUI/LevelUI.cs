@@ -23,7 +23,8 @@ public class LevelUI : MonoBehaviour
     [Header("Panel")]
     [SerializeField] GameObject panel;
 
-    [Header("Game Over UI")]
+    [Header("End Game UI")]
+    [SerializeField] GameObject endGameText;
     [SerializeField] GameObject gameOverUI;
 
     [Header("Keys")]
@@ -67,7 +68,7 @@ public class LevelUI : MonoBehaviour
 
     public void QuitToMenu()
     {
-        if (_gameManager.State != GameState.GameOver)
+        if (_gameManager.State != GameState.GameEnd)
         {
             //TODO : Save current state (players corrds, breakable tilemap, enemies + enemies coords)
         }
@@ -75,10 +76,11 @@ public class LevelUI : MonoBehaviour
         SceneManager.LoadScene("MainMenuScene");
     }
 
-    public void GameOverPopUp(int score)
+    public void EndGamePopUp(int score, bool gameOver)
     {
         panel.SetActive(true);
         gameOverUI.SetActive(true);
         totalScoreField.GetComponent<TextMeshProUGUI>().text = score.ToString();
+        endGameText.GetComponent<TextMeshProUGUI>().text = gameOver ? "цпс гюбепьемн" : "бх оепелнцкх";
     }
 }

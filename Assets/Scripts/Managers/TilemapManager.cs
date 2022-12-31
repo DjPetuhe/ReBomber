@@ -8,16 +8,23 @@ public class TilemapManager : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject redSlimePrefab;
+    [SerializeField] GameObject blueSlimePrefab;
+    [SerializeField] GameObject yellowSlimePrefab;
+    [SerializeField] GameObject purpleSlimePrefab;
     [SerializeField] GameObject destroyingWallPrefab;
-
-    [Header("Tilemaps")]
-    [SerializeField] Tilemap unbreakableTilemap;
-    [SerializeField] Tilemap breakableTilemap;
+    [SerializeField] GameObject nextLevelTriggerPrefab;
 
     [Header("Tiles")]
     [SerializeField] TileBase floorTile;
     [SerializeField] TileBase exitTile;
     [SerializeField] TileBase breakableWallTile;
+    [SerializeField] TileBase finishTile;
+    [SerializeField] TileBase startTile;
+    [SerializeField] TileBase redSlimeTile;
+    [SerializeField] TileBase purpleSlimeTile;
+    [SerializeField] TileBase yellowSlimeTile;
+    [SerializeField] TileBase blueSlimeTile;
 
     [Header("Coordinates")]
     [SerializeField] Vector3 startingCoords;
@@ -26,6 +33,8 @@ public class TilemapManager : MonoBehaviour
     [SerializeField] Vector2 leftTopCoords;
     [SerializeField] Vector2 rightBottomCoords;
 
+    private Tilemap _unbreakableTilemap;
+    private Tilemap _breakableTilemap;
     private LevelManager _levelManagerScript;
 
     private void Start()
@@ -33,22 +42,12 @@ public class TilemapManager : MonoBehaviour
         _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         if (_levelManagerScript.OriginalLevel)
         {
-            unbreakableTilemap = GameObject.Find("UnbreakableTilemap").GetComponent<Tilemap>();
-            breakableTilemap = GameObject.Find("BreakableTilemap").GetComponent<Tilemap>();
+            _unbreakableTilemap = GameObject.Find("UnbreakableTilemap").GetComponent<Tilemap>();
+            _breakableTilemap = GameObject.Find("BreakableTilemap").GetComponent<Tilemap>();
         }
         else LoadLevel();
-        unbreakableTilemap.SetTile(unbreakableTilemap.WorldToCell(startingCoords), floorTile);
-        unbreakableTilemap.SetTile(unbreakableTilemap.WorldToCell(endingCoords), exitTile);
-        breakableTilemap.SetTile(breakableTilemap.WorldToCell(endingCoords), breakableWallTile);
-        Vector2[] newPoints = 
-        { 
-            leftTopCoords + new Vector2(-4, 4),
-            new Vector2(leftTopCoords.x, rightBottomCoords.y) + new Vector2(-4, -4),
-            rightBottomCoords + new Vector2(4, -4),
-            new Vector2(rightBottomCoords.x, leftTopCoords.y) + new Vector2(4,4)
-        };
-        mapCollider.points = newPoints;
-        Instantiate(playerPrefab, startingCoords, Quaternion.identity);
+        ReplaceAuxiliaryTiles();
+        AdjustCameraBounds();
     }
 
     private void LoadLevel()
@@ -56,12 +55,56 @@ public class TilemapManager : MonoBehaviour
         //TODO: Load Level from json (maybe by using level manager)
     }
 
+    private void AdjustCameraBounds()
+    {
+        Vector2[] newPoints =
+        {
+            leftTopCoords + new Vector2(-4, 4),
+            new Vector2(leftTopCoords.x, rightBottomCoords.y) + new Vector2(-4, -4),
+            rightBottomCoords + new Vector2(4, -4),
+            new Vector2(rightBottomCoords.x, leftTopCoords.y) + new Vector2(4,4)
+        };
+        mapCollider.points = newPoints;
+    }
+
+    private void ReplaceAuxiliaryTiles()
+    {
+        for (int i = Mathf.RoundToInt(leftTopCoords.y); i < Mathf.RoundToInt(rightBottomCoords.y); i++)
+        {
+            for (int j = Mathf.RoundToInt(leftTopCoords.x); j < Mathf.RoundToInt(leftTopCoords.y); j++)
+            {
+                Vector3Int pos = new Vector3Int(i, j, 0);
+                TileBase breakableTile = _breakableTilemap.GetTile(pos);
+                TileBase unbreakableTile = _unbreakableTilemap.GetTile(pos);
+                if (unbreakableTile == null) continue;
+                else if (unbreakableTile == startTile) SummonPrefab(playerPrefab, pos);
+                else if (unbreakableTile == redSlimeTile) SummonPrefab(redSlimePrefab, pos);
+                else if (unbreakableTile == blueSlimeTile) SummonPrefab(blueSlimePrefab, pos);
+                else if (unbreakableTile == yellowSlimeTile) SummonPrefab(yellowSlimePrefab, pos);
+                else if (unbreakableTile == purpleSlimeTile) SummonPrefab(purpleSlimePrefab, pos);
+                if (breakableTile == null) continue;
+                else if (breakableTile == finishTile)
+                {
+                    _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), exitTile);
+                    _breakableTilemap.SetTile(_breakableTilemap.WorldToCell(pos), breakableWallTile);
+                    Instantiate(nextLevelTriggerPrefab, pos, Quaternion.identity);
+                }
+            }
+        }
+    }
+
+    private void SummonPrefab(GameObject prefab, Vector3Int pos)
+    {
+        Instantiate(prefab, pos, Quaternion.identity);
+        _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), floorTile);
+    }
+
     public void DestroyWall(Vector2 position)
     {
-        Vector3Int cell = breakableTilemap.WorldToCell(position);
-        if (breakableTilemap.GetTile(cell) is not null)
+        Vector3Int cell = _breakableTilemap.WorldToCell(position);
+        if (_breakableTilemap.GetTile(cell) is not null)
         {
-            breakableTilemap.SetTile(cell, null);
+            _breakableTilemap.SetTile(cell, null);
             Instantiate(destroyingWallPrefab, position, Quaternion.identity);
         }
     }

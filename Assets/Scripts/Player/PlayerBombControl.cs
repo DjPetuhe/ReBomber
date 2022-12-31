@@ -45,7 +45,7 @@ public class PlayerBombControl : MonoBehaviour
     private void Update()
     {
         if (_playerHealthControl.State == PlayerState.Dead) return;
-        if (_gameManager.State == GameState.Pause || _gameManager.State == GameState.GameOver) return;
+        if (_gameManager.State == GameState.Pause || _gameManager.State == GameState.GameEnd) return;
         if (Input.GetKeyDown(placeBombKey) && _bombsLeft > 0) StartCoroutine(PlaceBomb());
     }
 

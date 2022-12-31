@@ -35,6 +35,7 @@ public class LevelsMenu : MonoBehaviour
 
     private int _levelRecordID;
 
+    public const int MENU_SCENE_ID = 0;
     public const int CUSTOM_LEVEL_ID = 4;
     public const int FIRST_LEVEL_ID = 5;
     public const int LAST_LEVEL_ID = 14;

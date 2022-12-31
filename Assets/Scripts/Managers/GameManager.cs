@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     {
         Play = 0,
         Pause = 1,
-        GameOver = 2
+        GameEnd = 2
     }
 
     private static GameManager s_instance;
@@ -150,8 +150,13 @@ public class GameManager : MonoBehaviour
     {
         yield return GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealthControl>().Death();
         yield return new WaitForSeconds(TIME_BEFORE_GAME_OVER);
-        State = GameState.GameOver;
-        _levelUI.GameOverPopUp(Score);
+        EndGameUI(true);
+    }
+
+    public void EndGameUI(bool gameOver)
+    {
+        State = GameState.GameEnd;
+        _levelUI.EndGamePopUp(Score, gameOver);
         //TODO: delete old gamestate save
     }
 
@@ -163,5 +168,6 @@ public class GameManager : MonoBehaviour
     {
         Destroy(gameObject);
         s_instance = null;
+        Time.timeScale = 1;
     }
 }
