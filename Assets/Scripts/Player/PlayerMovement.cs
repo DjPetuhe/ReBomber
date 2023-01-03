@@ -25,6 +25,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private (int, int) _cellPosition;
+    public (int, int) CellPosition 
+    { 
+        get { return _cellPosition; }
+        private set 
+        {
+            _cellPosition = value;
+            Astar.EvaluateNewPathes(_cellPosition);
+        }
+    }
+
     private Vector2 _direction;
     
     private const float EPSILON = 0.001f;
@@ -35,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
         virtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform;
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         _playerHealthControl = GetComponent<PlayerHealthControl>();
+        CellPosition = (Mathf.RoundToInt(rb2d.position.y), Mathf.RoundToInt(rb2d.position.y));
     }
 
     private int FindDirection()
@@ -71,7 +83,12 @@ public class PlayerMovement : MonoBehaviour
         ConfigureAnimator();
     }
 
-    private void FixedUpdate() => rb2d.MovePosition(rb2d.position + _gameManager.Speed * Time.fixedDeltaTime * _direction);
+    private void FixedUpdate()
+    {
+        rb2d.MovePosition(rb2d.position + _gameManager.Speed * Time.fixedDeltaTime * _direction);
+        (int, int) currentPos = (Mathf.RoundToInt(rb2d.position.y), Mathf.RoundToInt(rb2d.position.y));
+        if (currentPos != CellPosition) CellPosition = currentPos;
+    }
 
     public void SpeedUpBy(float speedUp) => _gameManager.Speed += speedUp;
 }

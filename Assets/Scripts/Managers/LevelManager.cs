@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-//TODO: transition between levels, probably singleton.
 public class LevelManager : MonoBehaviour
 {
     [field: Header("Originality")]

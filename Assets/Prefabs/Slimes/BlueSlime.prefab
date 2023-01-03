@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 1020000260179495994}
   - component: {fileID: 1020000260179495993}
   - component: {fileID: 1020000260179495992}
+  - component: {fileID: -8317247196860937726}
   m_Layer: 0
   m_Name: BlueSlime
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -548011589
-  m_SortingLayer: 7
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 1852476345, guid: a4629d9e9188e554997588f3a49c6537, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -96,7 +97,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.15}
@@ -122,3 +123,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-8317247196860937726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020000260179496135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c9f4a5f0c654aa4895258008a2f7ce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slimeAnimator: {fileID: 1020000260179495992}
+  visionRadius: 3
+  speed: 0.5

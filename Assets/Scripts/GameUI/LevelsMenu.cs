@@ -50,8 +50,8 @@ public class LevelsMenu : MonoBehaviour
     {
         LoadOriginalLevels();
         LoadCustomLevels();
-        originalScrollbar.value = 0;
-        customScrollbar.value = 0;
+        originalScrollbar.value = 1;
+        customScrollbar.value = 1;
     }
 
     private void LoadOriginalLevels() => LoadLevels(true, LAST_LEVEL_ID - FIRST_LEVEL_ID + 1);

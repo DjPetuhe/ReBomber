@@ -26,11 +26,8 @@ public class GameManager : MonoBehaviour
                 _currentTime = 0;
                 MakeAllEnemiesAngry();
             }
-            else
-            {
-                _currentTime = value;
-                _levelUI.SetTime(_currentTime);
-            }
+            else _currentTime = value;
+            _levelUI.SetTime(_currentTime);
         }
     }
 
@@ -138,12 +135,16 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (State == GameState.Pause) return;
-        CurrentTime -= 1 * Time.deltaTime;
+        if (CurrentTime > 0) CurrentTime -= 1 * Time.deltaTime;
     }
 
     private void MakeAllEnemiesAngry()
     {
-        //TODO: make enemies vision: max, speed : max
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(GameObject enemy in enemies)
+        {
+            enemy.GetComponent<EnemyMovement>().MakeAngry();
+        }
     }
 
     private IEnumerator EndGame()
