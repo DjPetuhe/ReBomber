@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Scripts.Auxilliary
 {
@@ -16,6 +12,8 @@ namespace Assets.Scripts.Auxilliary
         public Cell Child { get; set; }
         public bool IsStart { get; set; } = false;
 
+        public Cell() { }
+
         public Cell(int y, int x, (int, int) endPoint, Cell parent = null)
         {
             Y = y;
@@ -23,7 +21,7 @@ namespace Assets.Scripts.Auxilliary
             if (parent is not null)
             {
                 Parent = parent;
-                H = (Math.Abs(endPoint.Item2 - x) + Math.Abs(endPoint.Item1 - y)) * 10;
+                H = (Math.Abs(endPoint.Item1 - y) + Math.Abs(endPoint.Item2 - x)) * 10;
                 if (Math.Abs(parent.X - this.X) + Math.Abs(parent.Y - this.Y) == 2) G = parent.G + 14;
                 else G = parent.G + 10;
             }

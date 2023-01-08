@@ -61,4 +61,11 @@ public class LevelManager : MonoBehaviour
             transition.SetTrigger("End");
         }
     }
+
+    public void QuitToMenu()
+    {
+        Destroy(gameObject);
+        s_instance = null;
+        SceneManager.LoadScene("MainMenuScene");
+    }
 }

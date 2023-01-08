@@ -133,6 +133,12 @@ AnimatorController:
   m_Name: RedSlime
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: Angry
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: Direction_x
     m_Type: 1
     m_DefaultFloat: 0
@@ -141,12 +147,6 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: Direction_y
     m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: Angry
-    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

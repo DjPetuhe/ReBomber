@@ -31,8 +31,13 @@ public class LevelUI : MonoBehaviour
     [SerializeField] KeyCode pauseKey;
 
     private GameManager _gameManager;
+    private LevelManager _levelManager;
 
-    private void Awake() => _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+    private void Awake()
+    {
+        _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        _levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+    }
 
     private void Update()
     {
@@ -42,6 +47,10 @@ public class LevelUI : MonoBehaviour
             else if (_gameManager.State == GameState.Pause) resumeButton.onClick.Invoke();
         }
     }
+
+    public void Pause() => _gameManager.PauseGame();
+
+    public void Resume() => _gameManager.ResumeGame();
 
     public void SetTime(float time) 
     {
@@ -73,7 +82,7 @@ public class LevelUI : MonoBehaviour
             //TODO : Save current state (players corrds, breakable tilemap, enemies + enemies coords)
         }
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().DestroyThyself();
-        SceneManager.LoadScene("MainMenuScene");
+        _levelManager.QuitToMenu();
     }
 
     public void EndGamePopUp(int score, bool gameOver)

@@ -24,7 +24,9 @@ public class DestroyingWallDrop : MonoBehaviour
     [SerializeField] int UpgradeSpeedCoef;
 
     private void OnDestroy()
-    {   if (transform.position == GameObject.Find("Map").GetComponent<TilemapManager>().EndingCoords) return;
+    {
+        GameObject.FindGameObjectWithTag("TilemapManager").GetComponent<TilemapManager>().AfterWallDestroy(transform.position);
+        if (transform.position == GameObject.Find("Map").GetComponent<TilemapManager>().EndingCoords) return;
         int dif = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>().DifficultyInt;
         int[] coefs = { UpgradeBlastCoef, UpgradeBombCoef, UpgradeHpUpCoef, UpgradeSpeedCoef };
         GameObject[] prefabs = { UpgradeBlastPrefab, UpgradeBombPrefab, UpgradeHpUpPrefab, UpgradeSpeedPrefab };

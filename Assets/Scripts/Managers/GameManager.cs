@@ -95,6 +95,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private int _explosionSize = START_EXPLOSION;
+    public int ExplosionSize
+    {
+        get { return _explosionSize; }
+        set 
+        {
+            if (value <= START_EXPLOSION) _explosionSize = START_EXPLOSION;
+            else if (value < MAX_EXPLOSION) _explosionSize = MAX_EXPLOSION;
+            else _explosionSize = value; 
+        }
+    }
+
     private const float TIME_BEFORE_GAME_OVER = 2f;
 
     private const float START_TIME_SECONDS = 300;
@@ -102,10 +114,12 @@ public class GameManager : MonoBehaviour
     private const int START_HEALTH = 4;
     private const int START_BOMBS = 1;
     private const float START_SPEED = 2.5f;
+    private const int START_EXPLOSION = 2;
 
     public const int MAX_HEALTH = 4;
     public const int MAX_BOMB = 5;
-    public const float MAX_SPEED = 10f;
+    public const float MAX_SPEED = 5f;
+    public const int MAX_EXPLOSION = 10;
 
     private void Awake()
     {

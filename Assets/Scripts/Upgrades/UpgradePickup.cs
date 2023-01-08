@@ -20,13 +20,13 @@ public class UpgradePickup : MonoBehaviour
         switch (type)
         {
             case UpgradeType.Blast:
-                player.GetComponent<PlayerBombControl>().ExplosionSize++;
+                player.GetComponent<PlayerBombControl>().ExpandExplosion();
                 break;
             case UpgradeType.Bomb:
                 player.GetComponent<PlayerBombControl>().AddBomb();
                 break;
             case UpgradeType.Hp:
-                //TODO: Add restore hp
+                player.GetComponent<PlayerHealthControl>().RestoreHealth();
                 break;
             case UpgradeType.Speed:
                 player.GetComponent<PlayerMovement>().SpeedUpBy(0.5f);

@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class TilemapManager : MonoBehaviour
 {
@@ -160,9 +159,9 @@ public class TilemapManager : MonoBehaviour
 
     public bool IsFineCoords(int i, int j)
     {
-
         if (i < 0 || j < 0) return false;
-        if (i > Map.Count - 1 || j > Map[0].Count - 1) return false;
+        if (Map.Count == 0 || Map[0].Count == 0) return false;
+        if (i > Map.Count - 1 || j > Map[i].Count - 1) return false;
         if (Map[i][j]) return false;
         return true;
     }
@@ -172,12 +171,16 @@ public class TilemapManager : MonoBehaviour
         Vector3Int cell = _breakableTilemap.WorldToCell(position);
         if (_breakableTilemap.GetTile(cell) is not null)
         {
-            Vector2Int mapIndexes = PositionToMapIndexes(position);
-            Map[mapIndexes.y][mapIndexes.x] = false;
             _breakableTilemap.SetTile(cell, null);
-            Astar.EvaluateNewPathes(Map);
             Instantiate(destroyingWallPrefab, position, Quaternion.identity);
         }
+    }
+
+    public void AfterWallDestroy(Vector2 position)
+    {
+        Vector2Int mapIndexes = PositionToMapIndexes(position);
+        Map[mapIndexes.y][mapIndexes.x] = false;
+        Astar.EvaluateNewPathes();
     }
 
     public void MarkBombOnMap(Vector2Int position) => BombOnMap(true, position);

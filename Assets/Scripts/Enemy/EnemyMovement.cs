@@ -1,10 +1,7 @@
-using Assets.Scripts.Auxilliary;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
-using Difficulty = DifficultyManager.Difficulty;
+using System.Collections.Generic;
 using GameState = GameManager.GameState;
+using Difficulty = DifficultyManager.Difficulty;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -48,6 +45,8 @@ public class EnemyMovement : MonoBehaviour
     private DifficultyManager _difficultyManager;
     private TilemapManager _tilemapManager;
     private GameObject _player;
+    private PlayerMovement _playerMovement;
+    private PlayerHealthControl _playerHealth;
 
     private const float MIN_VISION_RADIUS = 1;
     private const float MIN_SPEED = 0.5f;
@@ -66,6 +65,8 @@ public class EnemyMovement : MonoBehaviour
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
+        _playerMovement = _player.GetComponent<PlayerMovement>();
+        _playerHealth = _player.GetComponent<PlayerHealthControl>();
         Position = new(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
         goalPosition = Position;
     }
@@ -73,53 +74,73 @@ public class EnemyMovement : MonoBehaviour
     private void Update()
     {
         if (_gameManager.State == GameState.Pause || _gameManager.State == GameState.GameEnd) return;
-        if (!Recheck && Vector3.Distance(_player.transform.position, transform.position) > visionRadius)
+        float distance = float.MaxValue;
+        if (_player != null) distance = Vector3.Distance(_player.transform.position, transform.position);
+        CheckPosition();
+        if (distance > visionRadius && _state == EnemyState.Chase)
         {
             Recheck = true;
-            if (_state == EnemyState.Chase) _state = EnemyState.Calm;
+            _state = EnemyState.Calm;
+            goalPosition = Position;
         }
-        else if (Recheck)
+        else if (distance < visionRadius && Recheck)
         {
             Recheck = false;
             _moveDirection = Astar.MoveDirection(Position);
-            if (_moveDirection != Vector2Int.zero)
+            Vector2Int playerPos = new(_playerMovement.CellPosition.Item2, _playerMovement.CellPosition.Item1);
+            if (_moveDirection == Vector2Int.zero && playerPos != Position)
             {
-                _state = EnemyState.Chase;
-                goalPosition = Position + _moveDirection;
+                _state = EnemyState.Calm;
+                return;
             }
-            if (Mathf.Abs(_moveDirection.y) + Mathf.Abs(_moveDirection.y) == 1)
+            _state = EnemyState.Chase;
+            _moveWalkDirection = _moveDirection;
+            if (Vector3.Distance(transform.position, (Vector3Int)(Position + _moveDirection)) > Vector3.Distance((Vector3Int)Position, (Vector3Int)(Position + _moveDirection)))
             {
-                if (Vector3.Distance(transform.position, (Vector3Int)(Position + _moveDirection)) >= 1)
-                {
-                    goalPosition = Position;
-                    _moveDirection = new(0, 0);
-                }
+                goalPosition = Position;
             }
+            else goalPosition = Position + _moveDirection;
         }
     }
 
     private void FixedUpdate()
     {
         if (_gameManager.State == GameState.Pause || _gameManager.State == GameState.GameEnd) return;
-        Vector3 towards = _state switch
-        {
-            EnemyState.Chase => ((Vector3Int)_moveDirection),
-            _ => (Vector3Int)_moveWalkDirection
-        };
-        Vector3 nextStep = Vector3.MoveTowards(transform.position, transform.position + towards, speed * Time.deltaTime);
+        Vector3 nextStep = Vector3.MoveTowards(transform.position, (Vector3Int)goalPosition, speed * Time.fixedDeltaTime);
         if (Vector3.Distance(transform.position, (Vector3Int)goalPosition) <= Vector3.Distance(nextStep, (Vector3Int)goalPosition))
         {
             transform.position = (Vector3Int)goalPosition;
+            Astar.AddPathToRoute(Position, new(_playerMovement.CellPosition.Item2, _playerMovement.CellPosition.Item1));
             if (_state == EnemyState.Calm)
             {
                 _moveWalkDirection = RandomWalkDirection();
                 goalPosition = Position + _moveWalkDirection;
-                transform.position = Vector3.MoveTowards(transform.position, transform.position + (Vector3Int)_moveWalkDirection, speed * Time.deltaTime);
             }
-            else Recheck = true;
+            else
+            {
+                _moveDirection = Astar.MoveDirection(Position);
+                goalPosition = Position + _moveDirection;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, (Vector3Int)goalPosition, speed * Time.fixedDeltaTime);
         }
         else transform.position = nextStep;
-        Position = new(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+        if (transform.position != (Vector3Int)goalPosition) AdjustAnimator(goalPosition.y - transform.position.y, goalPosition.x - transform.position.x);
+    }
+
+    private void AdjustAnimator(float y, float x)
+    {
+        slimeAnimator.SetFloat("Direction_y", y);
+        slimeAnimator.SetFloat("Direction_x", x);
+    }
+
+    private void CheckPosition()
+    {
+        Vector2Int actualPos = new(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+        if (actualPos != Position)
+        {
+            Position = actualPos;
+            Recheck = true;
+        }
     }
 
     public void MakeAngry()

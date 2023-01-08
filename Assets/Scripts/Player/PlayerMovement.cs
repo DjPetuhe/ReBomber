@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
         virtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform;
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         _playerHealthControl = GetComponent<PlayerHealthControl>();
-        CellPosition = (Mathf.RoundToInt(rb2d.position.y), Mathf.RoundToInt(rb2d.position.y));
+        CellPosition = (Mathf.RoundToInt(rb2d.position.y), Mathf.RoundToInt(rb2d.position.x));
     }
 
     private int FindDirection()
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         rb2d.MovePosition(rb2d.position + _gameManager.Speed * Time.fixedDeltaTime * _direction);
-        (int, int) currentPos = (Mathf.RoundToInt(rb2d.position.y), Mathf.RoundToInt(rb2d.position.y));
+        (int, int) currentPos = (Mathf.RoundToInt(rb2d.position.y), Mathf.RoundToInt(rb2d.position.x));
         if (currentPos != CellPosition) CellPosition = currentPos;
     }
 

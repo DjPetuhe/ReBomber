@@ -744,7 +744,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7768518, y: 1}
+    m_SensorSize: {x: 1.779252, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2884,8 +2884,8 @@ Tilemap:
   - first: {x: -5, y: -2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2984,8 +2984,8 @@ Tilemap:
   - first: {x: 5, y: -2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3987,27 +3987,31 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 79646e645ca6c794ca1f25a9d674ca9e, type: 2}
   - m_RefCount: 150
     m_Data: {fileID: 11400000, guid: 5d2a431c891040a41ae7fb5d4ee344ac, type: 2}
-  - m_RefCount: 2
-    m_Data: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 4af66ecb0832fc64983396ccabd23083, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 2
+    m_Data: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 56
     m_Data: {fileID: -711411960, guid: 696c43d58158210479075b66e4de0d7a, type: 3}
   - m_RefCount: 150
     m_Data: {fileID: 1969259816, guid: 696c43d58158210479075b66e4de0d7a, type: 3}
-  - m_RefCount: 2
-    m_Data: {fileID: -491865741, guid: 696c43d58158210479075b66e4de0d7a, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: -1295715865, guid: 696c43d58158210479075b66e4de0d7a, type: 3}
+  - m_RefCount: 2
+    m_Data: {fileID: -491865741, guid: 696c43d58158210479075b66e4de0d7a, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 209
     m_Data:
@@ -4178,7 +4182,5 @@ MonoBehaviour:
   purpleSlimeTile: {fileID: 11400000, guid: 06b3a74b37682924ca723b55f88d6150, type: 2}
   yellowSlimeTile: {fileID: 11400000, guid: 15b6b12e7f41d284fbfc01eec9499f64, type: 2}
   blueSlimeTile: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}
-  startingCoords: {x: -7, y: 1, z: 0}
-  endingCoords: {x: 2, y: 0, z: 0}
   leftTopCoords: {x: -8, y: 4}
   rightBottomCoords: {x: 10, y: -6}

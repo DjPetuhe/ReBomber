@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using GameState = GameManager.GameState;
 using PlayerState = PlayerHealthControl.PlayerState;
-using System.Collections.Generic;
 
 public class PlayerBombControl : MonoBehaviour
 {
@@ -19,13 +19,6 @@ public class PlayerBombControl : MonoBehaviour
     [Header("Characteristics")]
     [Range(0f, 10f)]
     [SerializeField] float fuseTimeSeconds = 5f;
-    [Range(2f,10f)]
-    [SerializeField] int explosionSize = 2;
-    public int ExplosionSize
-    {
-        get { return explosionSize; }
-        set { if (value > 2 && value < MAX_EXPLOSION_SIZE) explosionSize = value; }
-    }
 
     private GameManager _gameManager;
     private TilemapManager _tilemapManager;
@@ -33,8 +26,6 @@ public class PlayerBombControl : MonoBehaviour
     private List<(GameObject, Vector2Int)> _bombs = new();
 
     private int _bombsLeft;
-
-    private const int MAX_EXPLOSION_SIZE = 10;
 
     private void OnEnable()
     {
@@ -70,7 +61,7 @@ public class PlayerBombControl : MonoBehaviour
         _tilemapManager.RemoveBombFromMap(intPos);
         GameObject explosion = Instantiate(explosionPrefab, pos, Quaternion.identity);
         ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
-        explosionScript.ExplosionSize = explosionSize;
+        explosionScript.ExplosionSize = _gameManager.ExplosionSize;
         explosionScript.Depth = 0;
         explosionScript.Explode(_tilemapManager);
     }
@@ -106,5 +97,11 @@ public class PlayerBombControl : MonoBehaviour
             _gameManager.BombsCount++;
             _bombsLeft++;
         }
+    }
+
+    public void ExpandExplosion()
+    {
+        if (_gameManager.ExplosionSize >= GameManager.MAX_EXPLOSION) return;
+        _gameManager.ExplosionSize++;
     }
 }

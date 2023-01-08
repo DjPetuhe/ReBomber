@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerHealthControl : MonoBehaviour
 {
@@ -18,6 +17,7 @@ public class PlayerHealthControl : MonoBehaviour
     [SerializeField] GameObject deathParticlesPrefab;
 
     private GameManager _gameManager;
+    private int _triggeredEnemies = 0;
 
     private static Color s_damageColor = new(255, 0, 0);
     private static Color s_defaultColor = new(255, 255, 255);
@@ -32,16 +32,22 @@ public class PlayerHealthControl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (State != PlayerState.Normal) return;
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Explosion"))
         {
-            _gameManager.Health--;
+            _triggeredEnemies++;
+            if (State != PlayerState.Normal) return;
             if (_gameManager.Health != 0) StartCoroutine(InvincibleFrames());
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Explosion")) _triggeredEnemies--;
+    }
+
     private IEnumerator InvincibleFrames()
     {
+        _gameManager.Health--;
         State = PlayerState.Invincible;
         for (int i = 0; i < BLINKING_AMOUNT; i++)
         {
@@ -51,6 +57,7 @@ public class PlayerHealthControl : MonoBehaviour
             if (i != BLINKING_AMOUNT - 1) yield return new WaitForSeconds(BLINKING_GAP_TIME);
         }
         State = PlayerState.Normal;
+        if (_triggeredEnemies != 0) StartCoroutine(InvincibleFrames());
     }
 
     public IEnumerator Death()
@@ -63,4 +70,6 @@ public class PlayerHealthControl : MonoBehaviour
         GameObject particles = Instantiate(deathParticlesPrefab, gameObject.transform.position, Quaternion.identity);
         particles.GetComponent<ParticleSystem>().Play();
     }
+
+    public void RestoreHealth() => _gameManager.Health++;
 }
