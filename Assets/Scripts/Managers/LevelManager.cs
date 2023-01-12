@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Difficulty = DifficultyManager.Difficulty;
 
 public class LevelManager : MonoBehaviour
 {
@@ -53,7 +54,9 @@ public class LevelManager : MonoBehaviour
         if (nextSceneID == 0) _gameManager.EndGameUI(false);
         else
         {
-            //Add next level to prefs as reached;
+            PlayerPrefs prefs = SaveManager.LoadPreferences();
+            if (nextSceneID > prefs.RecordLevelID) 
+                SaveManager.SavePreferences(prefs.SoundVolume, prefs.MusicVolume, (Difficulty)prefs.Difficulty, nextSceneID);
             transition.SetTrigger("Start");
             yield return new WaitForSeconds(TRANSITION_TIME_SECONDS);
             SceneManager.LoadScene(nextSceneID);

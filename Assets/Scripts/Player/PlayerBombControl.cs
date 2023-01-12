@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,12 +44,13 @@ public class PlayerBombControl : MonoBehaviour
         if (_bombs.Count > 0) MarkBombsOnMap();
         if (Input.GetKeyDown(placeBombKey) && _bombsLeft > 0) StartCoroutine(PlaceBomb());
     }
-
+    
     private IEnumerator PlaceBomb()
     {
         Vector2 offset = playerCollider.offset;
         Vector2 pos = new (Mathf.Round(transform.position.x + offset.x), Mathf.Round(transform.position.y + offset.y));
         Vector2Int intPos = new(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
+        if (_bombs.Any(b => b.Item2 == pos)) yield break;
         GameObject bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
         _bombs.Add((bomb, intPos));
         _tilemapManager.MarkBombOnMap(intPos);
@@ -55,10 +58,10 @@ public class PlayerBombControl : MonoBehaviour
         yield return new WaitForSeconds(fuseTimeSeconds);
         _bombsLeft++;
         _bombs.RemoveAll(b => b.Item1 == bomb);
-        Destroy(bomb);
         pos = new(Mathf.Round(bomb.transform.position.x), Mathf.Round(bomb.transform.position.y));
         intPos = new(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
         _tilemapManager.RemoveBombFromMap(intPos);
+        Destroy(bomb);
         GameObject explosion = Instantiate(explosionPrefab, pos, Quaternion.identity);
         ExplosionController explosionScript = explosion.GetComponent<ExplosionController>();
         explosionScript.ExplosionSize = _gameManager.ExplosionSize;
@@ -70,17 +73,16 @@ public class PlayerBombControl : MonoBehaviour
     {
         for (int i = 0; i < _bombs.Count; i++)
         {
-            var bomb = _bombs[i];
             Vector2Int pos = new()
             {
-                y = Mathf.RoundToInt(bomb.Item1.transform.position.y),
-                x = Mathf.RoundToInt(bomb.Item1.transform.position.x)
+                y = Mathf.RoundToInt(_bombs[i].Item1.transform.position.y),
+                x = Mathf.RoundToInt(_bombs[i].Item1.transform.position.x)
             };
-            if (bomb.Item2 != pos)
+            if (_bombs[i].Item2 != pos)
             {
-                _tilemapManager.RemoveBombFromMap(bomb.Item2);
+                _tilemapManager.RemoveBombFromMap(_bombs[i].Item2);
                 _tilemapManager.MarkBombOnMap(pos);
-                bomb.Item2 = pos;
+                _bombs[i] = new(_bombs[i].Item1, pos);
             }
         }
     }

@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
         set 
         {
             if (value <= START_EXPLOSION) _explosionSize = START_EXPLOSION;
-            else if (value < MAX_EXPLOSION) _explosionSize = MAX_EXPLOSION;
+            else if (value >= MAX_EXPLOSION) _explosionSize = MAX_EXPLOSION;
             else _explosionSize = value; 
         }
     }
