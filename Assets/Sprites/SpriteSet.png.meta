@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 19.99
+  spritePixelsToUnits: 19.85
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -778,7 +778,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Blue_sime_tile: -491865741
+      end_blast_sprite2: -219430966
       Purple_slime_tile: 241482239
       end_blast_sprite1: 365698080
       exploded_wall_sprite2: -784614081
@@ -802,13 +802,13 @@ TextureImporter:
       Red_slime_tile: 632867320
       health_powerup_sprite: 2111475145
       side_blast_sprite0: -633495248
-      green_floor_tile: 1969259816
-      exploded_wall_sprite0: -251866167
-      full_hear_sprite: 1476811940
-      side_blast_sprite1: 1487221000
-      start_floor_tile: -1295715865
       explosion_powerup_sprite: -486333312
-      end_blast_sprite2: -219430966
+      full_hear_sprite: 1476811940
+      Blue_sime_tile: -491865741
+      side_blast_sprite1: 1487221000
+      exploded_wall_sprite0: -251866167
+      start_floor_tile: -1295715865
+      green_floor_tile: 1969259816
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
