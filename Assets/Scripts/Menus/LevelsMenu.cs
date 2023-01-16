@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Difficulty = DifficultyManager.Difficulty;
+using System.Collections.Generic;
 
 public class LevelsMenu : MonoBehaviour
 {
@@ -29,9 +30,7 @@ public class LevelsMenu : MonoBehaviour
     [SerializeField] Difficulty[] difficulties;
     [SerializeField] string[] names;
 
-    private Difficulty[] _customDifficulties;
-    private string[] _customNames;
-    private int _customLevelsAmount;
+    private List<LevelData> _customLevels;
 
     private int _levelRecordID;
 
@@ -43,7 +42,7 @@ public class LevelsMenu : MonoBehaviour
     private void Awake()
     {
         _levelRecordID = SaveManager.LoadPreferences().RecordLevelID;
-        _customLevelsAmount = 0; //TODO: Change to loading custom data from json
+        _customLevels = SaveManager.LoadAllLevels();
     }
 
     private void Start()
@@ -56,7 +55,7 @@ public class LevelsMenu : MonoBehaviour
 
     private void LoadOriginalLevels() => LoadLevels(true, LAST_LEVEL_ID - FIRST_LEVEL_ID + 1);
 
-    private void LoadCustomLevels() => LoadLevels(false, _customLevelsAmount);
+    private void LoadCustomLevels() => LoadLevels(false, _customLevels.Count);
 
     private void LoadLevels(bool original, int amount)
     {
@@ -67,19 +66,19 @@ public class LevelsMenu : MonoBehaviour
         {
             GameObject levelButton = Instantiate(levelButtonPrefab);
             levelButton.transform.SetParent(parent.transform);
-            LevelButton buttonScript = levelButton.GetComponent<LevelButton>();
-            if ((i + 1) * LevelButton.ButtonHeight > height)
+            LevelMenuButton buttonScript = levelButton.GetComponent<LevelMenuButton>();
+            if ((i + 1) * LevelMenuButton.ButtonHeight > height)
             {
-                height = (i + 1) * LevelButton.ButtonHeight + 3;
+                height = (i + 1) * LevelMenuButton.ButtonHeight + 3;
                 parent.GetComponent<RectTransform>().sizeDelta = new(width, height);
             }
             if (original) ConfigureButton(buttonScript, i + FIRST_LEVEL_ID, i + 1, difficulties[i], names[i]);
-            else ConfigureButton(buttonScript, CUSTOM_LEVEL_ID, i + 1, _customDifficulties[i], _customNames[i]);
+            else ConfigureButton(buttonScript, CUSTOM_LEVEL_ID, i + 1, (Difficulty)_customLevels[i].Difficulty, _customLevels[i].Name);
             if (original && (i + FIRST_LEVEL_ID) > _levelRecordID) buttonScript.MakeNotInteractible();
         }
     }
 
-    private void ConfigureButton(LevelButton button, int index, int number, Difficulty dif, string name)
+    private void ConfigureButton(LevelMenuButton button, int index, int number, Difficulty dif, string name)
     {
         button.SetLevelIndex(index);
         button.SetNumberText(number);

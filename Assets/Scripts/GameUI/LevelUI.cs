@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using GameState = GameManager.GameState;
 
 public class LevelUI : MonoBehaviour

@@ -162,4 +162,41 @@ public static class Astar
         }
         return false;
     }
+
+    public static bool LevelEditorPathExists(Vector2Int startingPoint, Vector2Int endingPoint, List<List<bool>> map)
+    {
+        List<Cell> nodes = new() { new(startingPoint.y + 1, startingPoint.x + 1, (endingPoint.y + 1, endingPoint.x + 1)) };
+        List<(int, int)> visited = new();
+        Cell last = new();
+        bool finished = false;
+        while (nodes.Count > 0 && !finished)
+        {
+            Cell current = nodes.OrderBy(x => x.G + x.H).First();
+            visited.Add((current.Y, current.X));
+            nodes.Remove(current);
+            List<Cell> neighbours = GetNeighbors(current, map, visited, endingPoint);
+            foreach (var neighbour in neighbours)
+            {
+                if (neighbour.Y == endingPoint.y + 1 && neighbour.X == endingPoint.x + 1) return true;
+                if (IsNeededToAdd(neighbour, nodes)) nodes.Add(neighbour);
+            }
+        }
+        return finished;
+    }
+
+    public static List<Cell> GetNeighbors(Cell curr, List<List<bool>> map, List<(int, int)> visited, Vector2Int endingPoint)
+    {
+        List<(int, int)> directions = new();
+        if (curr.Y - 1 >= 0 && map[curr.Y - 1][curr.X]) directions.Add((-1, 0));
+        if (curr.X - 1 >= 0 && map[curr.Y][curr.X - 1]) directions.Add((0, -1));
+        if (curr.Y + 1 < map.Count && map[curr.Y + 1][curr.X]) directions.Add((1, 0));
+        if (curr.X + 1 < map[curr.Y].Count && map[curr.Y][curr.X + 1]) directions.Add((0, 1));
+        List<Cell> neighbors = new();
+        foreach (var dir in directions)
+        {
+            if (visited.Contains((curr.Y + dir.Item1, curr.X + dir.Item2))) continue;
+            neighbors.Add(new Cell(curr.Y + dir.Item1, curr.X + dir.Item2, (endingPoint.y + 1, endingPoint.x + 1), curr));
+        }
+        return neighbors;
+    }
 }

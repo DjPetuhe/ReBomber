@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2111525033043775221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2111525033043775218}
+  - component: {fileID: 2111525033043775219}
+  m_Layer: 0
+  m_Name: TileTransformer
+  m_TagString: TileTransformer
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2111525033043775218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2111525033043775221}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2111525033043775219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2111525033043775221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8b234a331f4ca34c90b18ac869f83e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorTile: {fileID: 11400000, guid: 5d2a431c891040a41ae7fb5d4ee344ac, type: 2}
+  exitTile: {fileID: 11400000, guid: d1d2827abea6d6740b45e59cc3948bd1, type: 2}
+  breakableWallTile: {fileID: 11400000, guid: 03044f56e23682e40954ac04b2df38b8, type: 2}
+  unbreakableWallTile: {fileID: 11400000, guid: 79646e645ca6c794ca1f25a9d674ca9e, type: 2}
+  finishTile: {fileID: 11400000, guid: f186646c0f85dfd41ae78ca884ccb09c, type: 2}
+  startTile: {fileID: 11400000, guid: 4af66ecb0832fc64983396ccabd23083, type: 2}
+  redSlimeTile: {fileID: 11400000, guid: 742b7c8b00ce4374a94910153b5bb1f4, type: 2}
+  purpleSlimeTile: {fileID: 11400000, guid: 06b3a74b37682924ca723b55f88d6150, type: 2}
+  yellowSlimeTile: {fileID: 11400000, guid: 15b6b12e7f41d284fbfc01eec9499f64, type: 2}
+  blueSlimeTile: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}

@@ -107,6 +107,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public string CustomName { get; set; }
+
     private const float TIME_BEFORE_GAME_OVER = 2f;
 
     private const float START_TIME_SECONDS = 300;

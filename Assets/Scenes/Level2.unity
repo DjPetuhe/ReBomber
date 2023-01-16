@@ -299,7 +299,6 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  - component: {fileID: 519420033}
   - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
@@ -374,18 +373,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &519420033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d1408de15f992c43ab000fb3749dbca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,7 +612,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7768518, y: 1}
+    m_SensorSize: {x: 1.77747, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -847,7 +834,7 @@ TilemapRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.0002501011, y: 0.0002501011, z: 0}
+  m_ChunkCullingBounds: {x: 0.0037783384, y: 0.0037783384, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -1261,7 +1248,7 @@ TilemapRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.0002501011, y: 0.0002501011, z: 0}
+  m_ChunkCullingBounds: {x: 0.0037783384, y: 0.0037783384, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -2854,11 +2841,5 @@ MonoBehaviour:
   unbreakableWallTile: {fileID: 11400000, guid: 79646e645ca6c794ca1f25a9d674ca9e, type: 2}
   finishTile: {fileID: 11400000, guid: f186646c0f85dfd41ae78ca884ccb09c, type: 2}
   startTile: {fileID: 11400000, guid: 4af66ecb0832fc64983396ccabd23083, type: 2}
-  redSlimeTile: {fileID: 11400000, guid: 742b7c8b00ce4374a94910153b5bb1f4, type: 2}
-  purpleSlimeTile: {fileID: 11400000, guid: 06b3a74b37682924ca723b55f88d6150, type: 2}
-  yellowSlimeTile: {fileID: 11400000, guid: 15b6b12e7f41d284fbfc01eec9499f64, type: 2}
-  blueSlimeTile: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}
-  startingCoords: {x: -7, y: 1, z: 0}
-  endingCoords: {x: 2, y: 0, z: 0}
   leftTopCoords: {x: -8, y: 4}
   rightBottomCoords: {x: 10, y: -2}

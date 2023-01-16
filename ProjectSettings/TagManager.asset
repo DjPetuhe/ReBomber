@@ -15,6 +15,9 @@ TagManager:
   - Exit
   - TilemapManager
   - LevelEditorManager
+  - Button
+  - AddButton
+  - TileTransformer
   layers:
   - Default
   - TransparentFX

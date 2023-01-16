@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 using Tile = TilemapManager.Tile;
 
-//TODO: call generate function and print map, check if level is possible to finish,
+//TODO: call generate function
 public class LevelEditorManager : MonoBehaviour
 {
     [Header("Line")]
@@ -11,29 +12,28 @@ public class LevelEditorManager : MonoBehaviour
 
     [Header("Tilemaps")]
     [SerializeField] Tilemap tilemap;
-    [SerializeField] Tilemap SelectionTilemap;
+    [SerializeField] Tilemap selectionTilemap;
 
     [Header("Tiles")]
     [SerializeField] TileBase floorTile;
-    [SerializeField] TileBase breakableWallTile;
     [SerializeField] TileBase unbreakableWallTile;
     [SerializeField] TileBase finishTile;
     [SerializeField] TileBase startTile;
-    [SerializeField] TileBase redSlimeTile;
-    [SerializeField] TileBase purpleSlimeTile;
-    [SerializeField] TileBase yellowSlimeTile;
-    [SerializeField] TileBase blueSlimeTile;
 
     private TileBase _choosenTile;
     private LineRenderer _lineRenderer;
     private PolygonCollider2D _cameraBounds;
     private CameraMovement _cameraMovement;
+    private TileTransformer _tileTransformer;
 
     private bool _isTileChoosen = false;
     private bool _isMouseCanPaint = true;
     private Vector2Int? _choosningTilePos;
     private int _height;
     private int _width;
+
+    public static bool Editing { get; set; } = false;
+    public static string LevelName { get; set; }
 
     private const float OFFSET = -0.5f;
     private const int CAMERA_PADDING = 5;
@@ -43,7 +43,15 @@ public class LevelEditorManager : MonoBehaviour
         _lineRenderer = line.GetComponent<LineRenderer>();
         _cameraBounds = line.GetComponent<PolygonCollider2D>();
         _cameraMovement = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraMovement>();
-        ResizeMap(10, 10);
+        _tileTransformer = GameObject.FindGameObjectWithTag("TileTransformer").GetComponent<TileTransformer>();
+        if (!Editing) ResizeMap(10, 10);
+        else
+        {
+            LevelData level = SaveManager.LoadLevel(LevelName);
+            ResizeMap(level.Height, level.Width);
+            for (int i = 0; i < level.Position.Count; i++)
+                tilemap.SetTile(tilemap.WorldToCell((Vector3Int)level.Position[i]), _tileTransformer.TileToTileBase((Tile)level.TilesID[i]));
+        }
     }
 
     private void Update()
@@ -65,9 +73,9 @@ public class LevelEditorManager : MonoBehaviour
             else if (_choosningTilePos == null || _choosningTilePos != currentPos)
             {
                 if (_choosningTilePos != null)
-                    SelectionTilemap.SetTile(SelectionTilemap.WorldToCell((Vector3Int)_choosningTilePos), null);
+                    selectionTilemap.SetTile(selectionTilemap.WorldToCell((Vector3Int)_choosningTilePos), null);
                 _choosningTilePos = currentPos;
-                SelectionTilemap.SetTile(SelectionTilemap.WorldToCell((Vector3Int)_choosningTilePos), _choosenTile);
+                selectionTilemap.SetTile(selectionTilemap.WorldToCell((Vector3Int)_choosningTilePos), _choosenTile);
             }
             if (Input.GetMouseButton(0))
             {
@@ -80,7 +88,7 @@ public class LevelEditorManager : MonoBehaviour
     {
         if (_choosningTilePos != null)
         {
-            SelectionTilemap.SetTile(SelectionTilemap.WorldToCell((Vector3Int)_choosningTilePos), null);
+            selectionTilemap.SetTile(selectionTilemap.WorldToCell((Vector3Int)_choosningTilePos), null);
             _choosningTilePos = null;
         }
     }
@@ -144,7 +152,7 @@ public class LevelEditorManager : MonoBehaviour
 
     public void ChooseTile(Tile tile)
     {
-        TileBase choosen = TileToTileBase(tile);
+        TileBase choosen = _tileTransformer.TileToTileBase(tile);
         if (_isTileChoosen && _choosenTile == choosen)
         {
             _isTileChoosen = false;
@@ -157,21 +165,70 @@ public class LevelEditorManager : MonoBehaviour
         }
     }
 
-    private TileBase TileToTileBase(Tile tile)
+    public void SwitchPaintOption() => _isMouseCanPaint = !_isMouseCanPaint;
+
+    public bool PossibleLevel()
     {
-        return tile switch
-        {
-            Tile.BreakableWall => breakableWallTile,
-            Tile.UnbreakableWall => unbreakableWallTile,
-            Tile.Finish => finishTile,
-            Tile.Start => startTile,
-            Tile.RedSlime => redSlimeTile,
-            Tile.PurpleSlime => purpleSlimeTile,
-            Tile.YellowSlime => yellowSlimeTile,
-            Tile.BlueSlime => blueSlimeTile,
-            _ => floorTile
-        };
+        if (!StartAndFinishCheck(out List<List<bool>> map, out Vector2Int startPos, out Vector2Int endPos)) return false;
+        if (!Astar.LevelEditorPathExists(startPos, endPos, map)) return false;
+        return true;
     }
 
-    public void SwitchPaintOption() => _isMouseCanPaint = !_isMouseCanPaint;
+    private bool StartAndFinishCheck(out List<List<bool>> map, out Vector2Int startPos, out Vector2Int endPos)
+    {
+        map = new();
+        startPos = new();
+        endPos = new();
+        bool foundStart = false;
+        bool foundFinish = false;
+        for (int i = -1; i <= _height; i++)
+        {
+            map.Add(new());
+            for (int j = -1; j <= _width; j++)
+            {
+                TileBase current = tilemap.GetTile(tilemap.WorldToCell(new(j, i)));
+                if (current == unbreakableWallTile) map[i + 1].Add(false);
+                else
+                {
+                    if (current == startTile)
+                    {
+                        if (foundStart) return false;
+                        foundStart = true;
+                        startPos = new(j, i);
+                    }
+                    else if (current == finishTile)
+                    {
+                        if (foundFinish) return false;
+                        foundFinish = true;
+                        endPos = new(j, i);
+                    }
+                    map[i + 1].Add(true);
+                }
+            }
+        }
+        if (!foundStart || !foundFinish) return false;
+        int floorNeighbour = 0;
+        if (tilemap.GetTile(tilemap.WorldToCell(new(startPos.x + 1, startPos.y))) == floorTile) floorNeighbour++;
+        if (tilemap.GetTile(tilemap.WorldToCell(new(startPos.x - 1, startPos.y))) == floorTile) floorNeighbour++;
+        if (tilemap.GetTile(tilemap.WorldToCell(new(startPos.x, startPos.y + 1))) == floorTile) floorNeighbour++;
+        if (tilemap.GetTile(tilemap.WorldToCell(new(startPos.x, startPos.y - 1))) == floorTile) floorNeighbour++;
+        if (floorNeighbour < 2) return false;
+        return true;
+    }
+
+    public void SaveLevel(string name, int difficulty)
+    {
+        List<int> tilesID = new();
+        List<Vector2Int> positions = new();
+        for (int i = -1; i <= _height; i++)
+        {
+            for (int j = -1; j <= _width; j++)
+            {
+                Vector2Int curPos = new(j, i);
+                tilesID.Add((int)_tileTransformer.TilebaseToTile(tilemap.GetTile(tilemap.WorldToCell((Vector2)curPos))));
+                positions.Add(curPos);
+            }
+        }
+        SaveManager.SaveLevel(_height, _width, name, difficulty, tilesID, positions);
+    }
 }

@@ -35,13 +35,7 @@ public class TilemapManager : MonoBehaviour
     [SerializeField] TileBase floorTile;
     [SerializeField] TileBase exitTile;
     [SerializeField] TileBase breakableWallTile;
-    [SerializeField] TileBase unbreakableWallTile;
     [SerializeField] TileBase finishTile;
-    [SerializeField] TileBase startTile;
-    [SerializeField] TileBase redSlimeTile;
-    [SerializeField] TileBase purpleSlimeTile;
-    [SerializeField] TileBase yellowSlimeTile;
-    [SerializeField] TileBase blueSlimeTile;
 
     [Header("Coordinates")]
     [SerializeField] Vector2 leftTopCoords;
@@ -52,6 +46,7 @@ public class TilemapManager : MonoBehaviour
     private Tilemap _unbreakableTilemap;
     private Tilemap _breakableTilemap;
     private LevelManager _levelManagerScript;
+    private TileTransformer _tileTransofrmer;
 
     public List<List<bool>> Map { get; private set; } = new();
 
@@ -60,6 +55,7 @@ public class TilemapManager : MonoBehaviour
         _levelManagerScript = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         _unbreakableTilemap = GameObject.Find("UnbreakableTilemap").GetComponent<Tilemap>();
         _breakableTilemap = GameObject.Find("BreakableTilemap").GetComponent<Tilemap>();
+        _tileTransofrmer = GameObject.FindGameObjectWithTag("TileTransformer").GetComponent<TileTransformer>();
         if (!_levelManagerScript.OriginalLevel) LoadLevel();
         ReplaceAuxiliaryTiles();
         AdjustCameraBounds();
@@ -67,8 +63,19 @@ public class TilemapManager : MonoBehaviour
 
     private void LoadLevel()
     {
-        //TODO: Load Level from json (maybe by using level manager)
-        //TODO: also load left-top and right-bottom coords 
+        LevelData level = SaveManager.LoadLevel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().CustomName);
+        for (int i = 0; i < level.Position.Count; i++)
+        {
+            TileBase tile = _tileTransofrmer.TileToTileBase((Tile)level.TilesID[i]);
+            if (tile == breakableWallTile || tile == finishTile)
+            {
+                _breakableTilemap.SetTile(_breakableTilemap.WorldToCell((Vector3Int)level.Position[i]), tile);
+                _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell((Vector3Int)level.Position[i]), floorTile);
+            }
+            else _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell((Vector3Int)level.Position[i]), tile);
+        }
+        leftTopCoords = new(-1, level.Height + 1);
+        rightBottomCoords = new(level.Width + 1, -1);
     }
 
     private void AdjustCameraBounds()
@@ -91,8 +98,8 @@ public class TilemapManager : MonoBehaviour
             for (int j = Mathf.RoundToInt(leftTopCoords.x); j <= Mathf.RoundToInt(rightBottomCoords.x); j++)
             {
                 Vector3Int pos = new(j, i, 0);
-                Tile breakableTile = TilebaseToTile(_breakableTilemap.GetTile(_breakableTilemap.WorldToCell(pos)));
-                Tile unbreakableTile = TilebaseToTile(_unbreakableTilemap.GetTile(_unbreakableTilemap.WorldToCell(pos)));
+                Tile breakableTile = _tileTransofrmer.TilebaseToTile(_breakableTilemap.GetTile(_breakableTilemap.WorldToCell(pos)));
+                Tile unbreakableTile = _tileTransofrmer.TilebaseToTile(_unbreakableTilemap.GetTile(_unbreakableTilemap.WorldToCell(pos)));
 
                 if (unbreakableTile == Tile.UnbreakableWall) Map[i - Mathf.RoundToInt(rightBottomCoords.y)].Add(true);
                 else if (breakableTile == Tile.BreakableWall || breakableTile == Tile.Finish) Map[i - Mathf.RoundToInt(rightBottomCoords.y)].Add(true);
@@ -118,23 +125,6 @@ public class TilemapManager : MonoBehaviour
         Instantiate(prefab, pos, Quaternion.identity);
         _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), floorTile);
     }
-
-    private Tile TilebaseToTile(TileBase tile)
-    {
-        //Switch only work with const values;
-        if (tile == floorTile) return Tile.Floor;
-        else if (tile == unbreakableWallTile) return Tile.UnbreakableWall;
-        else if (tile == breakableWallTile) return Tile.BreakableWall;
-        else if (tile == blueSlimeTile) return Tile.BlueSlime;
-        else if (tile == yellowSlimeTile) return Tile.YellowSlime;
-        else if (tile == purpleSlimeTile) return Tile.PurpleSlime;
-        else if (tile == redSlimeTile) return Tile.RedSlime;
-        else if (tile == startTile) return Tile.Start;
-        else if (tile == finishTile) return Tile.Finish;
-        else if (tile == exitTile) return Tile.Exit;
-        else return Tile.Empty;
-    }
-
     private GameObject PrefabOnTile(Tile tile)
     {
         return tile switch
