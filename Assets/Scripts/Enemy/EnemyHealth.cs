@@ -5,6 +5,9 @@ public class EnemyHealth : MonoBehaviour
     [Header("Particle System prefab")]
     [SerializeField] GameObject deathParticlesPrefab;
 
+    [field:Header("ID")]
+    [field:SerializeField] public int ID { get; set; }
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.CompareTag("Explosion"))

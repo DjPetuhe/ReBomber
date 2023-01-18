@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathParticlesPrefab: {fileID: 7297090815858143179, guid: d3adae8aff5ef5f4391fcc01f226bc9b, type: 3}
+  <ID>k__BackingField: 4
 --- !u!114 &3711733982505865764
 MonoBehaviour:
   m_ObjectHideFlags: 0

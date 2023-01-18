@@ -32,6 +32,8 @@ public class LevelUI : MonoBehaviour
     private GameManager _gameManager;
     private LevelManager _levelManager;
 
+    private bool _pauseEnabled = true;
+
     private void Awake()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -40,6 +42,7 @@ public class LevelUI : MonoBehaviour
 
     private void Update()
     {
+        if (!_pauseEnabled) return;
         if (Input.GetKeyDown(pauseKey))
         {
             if (_gameManager.State == GameState.Play) pauseButton.onClick.Invoke();
@@ -51,7 +54,7 @@ public class LevelUI : MonoBehaviour
 
     public void Resume() => _gameManager.ResumeGame();
 
-    public void SetTime(float time) 
+    public void SetTime(float time)
     {
         int minutes = Mathf.CeilToInt(time) / 60;
         int seconds = Mathf.CeilToInt(time) % 60;
@@ -76,10 +79,7 @@ public class LevelUI : MonoBehaviour
 
     public void QuitToMenu()
     {
-        if (_gameManager.State != GameState.GameEnd)
-        {
-            //TODO : Save current state (players corrds, breakable tilemap, enemies + enemies coords)
-        }
+        if (_gameManager.State != GameState.GameEnd) _gameManager.SaveGameState();
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().DestroyThyself();
         _levelManager.QuitToMenu();
     }
@@ -90,5 +90,11 @@ public class LevelUI : MonoBehaviour
         gameOverUI.SetActive(true);
         totalScoreField.GetComponent<TextMeshProUGUI>().text = score.ToString();
         endGameText.GetComponent<TextMeshProUGUI>().text = gameOver ? "цпс гюбепьемн" : "бх оепелнцкх";
+    }
+
+    public void SwitchPauseStatus(bool enable)
+    {
+        _pauseEnabled = enable;
+        pauseButton.interactable = _pauseEnabled;
     }
 }

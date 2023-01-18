@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 
@@ -56,26 +57,49 @@ public class TilemapManager : MonoBehaviour
         _unbreakableTilemap = GameObject.Find("UnbreakableTilemap").GetComponent<Tilemap>();
         _breakableTilemap = GameObject.Find("BreakableTilemap").GetComponent<Tilemap>();
         _tileTransofrmer = GameObject.FindGameObjectWithTag("TileTransformer").GetComponent<TileTransformer>();
-        if (!_levelManagerScript.OriginalLevel) LoadLevel();
+        GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        if (!_levelManagerScript.OriginalLevel && !gameManager.LoadedGameState) 
+        {
+            LevelData level = SaveManager.LoadLevel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().CustomName);
+            LoadLevel(level);
+            leftTopCoords = new(-1, level.Height + 1);
+            rightBottomCoords = new(level.Width + 1, -1);
+        }
+        else if (gameManager.LoadedGameState)
+        {
+            GameStateData gameState = SaveManager.LoadGameState();
+            _unbreakableTilemap.ClearAllTiles();
+            _breakableTilemap.ClearAllTiles();
+            LevelData level = new()
+            {
+                Position = gameState.TilesPosition,
+                TilesID = gameState.TilesID
+            };
+            LoadLevel(level);
+            for (int i = 0; i < gameState.EntityPosition.Count; i++)
+            {
+                Instantiate(PrefabOnID(gameState.EntityID[i]), gameState.EntityPosition[i], Quaternion.identity);
+            }
+            leftTopCoords = gameState.LeftTopCoords;
+            rightBottomCoords = gameState.RightBottomCoords;
+        }
         ReplaceAuxiliaryTiles();
         AdjustCameraBounds();
+        if (!gameManager.LoadedGameState) gameManager.SaveGameState();
     }
 
-    private void LoadLevel()
+    private void LoadLevel(LevelData level)
     {
-        LevelData level = SaveManager.LoadLevel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().CustomName);
         for (int i = 0; i < level.Position.Count; i++)
         {
             TileBase tile = _tileTransofrmer.TileToTileBase((Tile)level.TilesID[i]);
-            if (tile == breakableWallTile || tile == finishTile)
+            if (tile != null && (tile == breakableWallTile || tile == finishTile))
             {
                 _breakableTilemap.SetTile(_breakableTilemap.WorldToCell((Vector3Int)level.Position[i]), tile);
                 _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell((Vector3Int)level.Position[i]), floorTile);
             }
             else _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell((Vector3Int)level.Position[i]), tile);
         }
-        leftTopCoords = new(-1, level.Height + 1);
-        rightBottomCoords = new(level.Width + 1, -1);
     }
 
     private void AdjustCameraBounds()
@@ -109,10 +133,13 @@ public class TilemapManager : MonoBehaviour
                 GameObject prefab = PrefabOnTile(unbreakableTile);
 
                 if (prefab is not null) SummonPrefab(prefab, pos);
-                if (breakableTile == Tile.Finish)
+                if (breakableTile == Tile.Finish || unbreakableTile == Tile.Exit)
                 {
-                    _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), exitTile);
-                    _breakableTilemap.SetTile(_breakableTilemap.WorldToCell(pos), breakableWallTile);
+                    if (breakableTile == Tile.Finish)
+                    {
+                        _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), exitTile);
+                        _breakableTilemap.SetTile(_breakableTilemap.WorldToCell(pos), breakableWallTile);
+                    }
                     _endingCoords = new(j, i, 0);
                     Instantiate(nextLevelTriggerPrefab, pos, Quaternion.identity);
                 }
@@ -125,6 +152,7 @@ public class TilemapManager : MonoBehaviour
         Instantiate(prefab, pos, Quaternion.identity);
         _unbreakableTilemap.SetTile(_unbreakableTilemap.WorldToCell(pos), floorTile);
     }
+
     private GameObject PrefabOnTile(Tile tile)
     {
         return tile switch
@@ -134,6 +162,19 @@ public class TilemapManager : MonoBehaviour
             Tile.YellowSlime => yellowSlimePrefab,
             Tile.PurpleSlime => purpleSlimePrefab,
             Tile.RedSlime => redSlimePrefab,
+            _ => null
+        };
+    }
+
+    private GameObject PrefabOnID(int id)
+    {
+        return id switch
+        {
+            1 => playerPrefab,
+            2 => blueSlimePrefab,
+            3 => yellowSlimePrefab,
+            4 => purpleSlimePrefab,
+            5 => redSlimePrefab,
             _ => null
         };
     }
@@ -181,5 +222,50 @@ public class TilemapManager : MonoBehaviour
     {
         Vector2Int MapIndexes = PositionToMapIndexes(position);
         Map[MapIndexes.y][MapIndexes.x] = set;
+    }
+
+    public void TilemapToGameState(out GameStateData gameState)
+    {
+        gameState = new();
+        gameState.LeftTopCoords = new(Mathf.RoundToInt(leftTopCoords.x), Mathf.RoundToInt(leftTopCoords.y));
+        gameState.RightBottomCoords = new(Mathf.RoundToInt(rightBottomCoords.x), Mathf.RoundToInt(rightBottomCoords.y));
+        List<int> TilesID = new();
+        List<Vector2Int> TilesPositions = new();
+        List<int> EntityID = new();
+        List<Vector2> EntityPos = new();
+        List<GameObject> slimes = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+        for (int i = Mathf.RoundToInt(rightBottomCoords.y); i <= Mathf.RoundToInt(leftTopCoords.y); i++)
+        {
+            for (int j = Mathf.RoundToInt(leftTopCoords.x); j <= Mathf.RoundToInt(rightBottomCoords.x); j++)
+            {
+                Vector2Int pos = new(j, i);
+                Tile breakableTile = _tileTransofrmer.TilebaseToTile(_breakableTilemap.GetTile(_breakableTilemap.WorldToCell((Vector2)pos)));
+                Tile unbreakableTile = _tileTransofrmer.TilebaseToTile(_unbreakableTilemap.GetTile(_unbreakableTilemap.WorldToCell((Vector2)pos)));
+                if (unbreakableTile == Tile.Empty) continue;
+                if (breakableTile == Tile.Finish || unbreakableTile == Tile.Exit)
+                {
+                    if (breakableTile == Tile.Finish || breakableTile == Tile.BreakableWall)
+                        TilesID.Add((int)Tile.Finish);
+                    else if (unbreakableTile == Tile.Exit && unbreakableTile == Tile.Empty)
+                        TilesID.Add((int)Tile.Exit);
+                }
+                else if (breakableTile == Tile.BreakableWall)
+                    TilesID.Add((int)Tile.BreakableWall);
+                else TilesID.Add((int)unbreakableTile);
+                TilesPositions.Add(pos);
+            }
+        }
+        foreach (var slime in slimes)
+        {
+            EntityID.Add(slime.GetComponent<EnemyHealth>().ID);
+            EntityPos.Add((Vector2)slime.transform.position);
+        }
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        EntityID.Add(1);
+        EntityPos.Add((Vector2)player.transform.position);
+        gameState.TilesID = TilesID;
+        gameState.TilesPosition = TilesPositions;
+        gameState.EntityID = EntityID;
+        gameState.EntityPosition = EntityPos;
     }
 }

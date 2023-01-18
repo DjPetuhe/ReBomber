@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
     }
 
     public string CustomName { get; set; }
+    public bool LoadedGameState { get; set; } = false;
 
     private const float TIME_BEFORE_GAME_OVER = 2f;
 
@@ -143,7 +144,17 @@ public class GameManager : MonoBehaviour
     private void AdaptGameManager()
     {
         _levelUI = GameObject.Find("LevelUI").GetComponent<LevelUI>();
-        CurrentTime = START_TIME_SECONDS;
+        if (LoadedGameState)
+        {
+            GameStateData gameState = SaveManager.LoadGameState();
+            CurrentTime = gameState.Time;
+            Score = gameState.Score;
+            Health = gameState.Health;
+            Speed = gameState.PlayerSpeed;
+            BombsCount = gameState.BombAmount;
+            ExplosionSize = gameState.ExplosionSize;
+        }
+        else CurrentTime = START_TIME_SECONDS;
         _levelUI.SetScore(_score);
         _levelUI.SetHealth(_health);
     }
@@ -165,6 +176,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator EndGame()
     {
+        _levelUI.SwitchPauseStatus(false);
         yield return GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealthControl>().Death();
         yield return new WaitForSeconds(TIME_BEFORE_GAME_OVER);
         EndGameUI(true);
@@ -174,12 +186,26 @@ public class GameManager : MonoBehaviour
     {
         State = GameState.GameEnd;
         _levelUI.EndGamePopUp(Score, gameOver);
-        //TODO: delete old gamestate save
+        SaveManager.DeleteGameState();
     }
 
     public void ResumeGame() => State = GameState.Play;
 
     public void PauseGame() => State = GameState.Pause;
+
+    public void SaveGameState()
+    {
+        TilemapManager tilemapManager = GameObject.FindGameObjectWithTag("TilemapManager").GetComponent<TilemapManager>();
+        tilemapManager.TilemapToGameState(out GameStateData gameState);
+        gameState.Health = Health;
+        gameState.SceneID = SceneManager.GetActiveScene().buildIndex;
+        gameState.Score = Score;
+        gameState.Time = CurrentTime;
+        gameState.BombAmount = BombsCount;
+        gameState.ExplosionSize = ExplosionSize;
+        gameState.Name = CustomName;
+        SaveManager.SaveGameState(gameState);
+    }
 
     public void DestroyThyself()
     {

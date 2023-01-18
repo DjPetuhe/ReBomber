@@ -59,6 +59,7 @@ public class LevelManager : MonoBehaviour
                 SaveManager.SavePreferences(prefs.SoundVolume, prefs.MusicVolume, (Difficulty)prefs.Difficulty, nextSceneID);
             transition.SetTrigger("Start");
             yield return new WaitForSeconds(TRANSITION_TIME_SECONDS);
+            _gameManager.LoadedGameState = false;
             SceneManager.LoadScene(nextSceneID);
             _sceneID = nextSceneID;
             transition.SetTrigger("End");

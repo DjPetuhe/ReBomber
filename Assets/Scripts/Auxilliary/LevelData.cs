@@ -10,6 +10,8 @@ public class LevelData
     public List<int> TilesID;
     public List<Vector2Int> Position;
 
+    public LevelData() { }
+
     public LevelData(int height, int width, string name, int difficulty, List<int> tilesID, List<Vector2Int> position)
     {
         Height = height;

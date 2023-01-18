@@ -25,7 +25,9 @@ public class DestroyingWallDrop : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameObject.FindGameObjectWithTag("TilemapManager").GetComponent<TilemapManager>().AfterWallDestroy(transform.position);
+        GameObject tilemapManager = GameObject.FindGameObjectWithTag("TilemapManager");
+        if (tilemapManager == null) return;
+        tilemapManager.GetComponent<TilemapManager>().AfterWallDestroy(transform.position);
         if (transform.position == GameObject.Find("Map").GetComponent<TilemapManager>().EndingCoords) return;
         int dif = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>().DifficultyInt;
         int[] coefs = { UpgradeBlastCoef, UpgradeBombCoef, UpgradeHpUpCoef, UpgradeSpeedCoef };

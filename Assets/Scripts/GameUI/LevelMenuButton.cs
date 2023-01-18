@@ -35,7 +35,7 @@ public class LevelMenuButton : LevelButton
         SceneManager.LoadScene(_levelSceneIndex);
     }
 
-    protected bool PossibleIndex(int index)
+    public static bool PossibleIndex(int index)
     {
         if (index < LevelsMenu.CUSTOM_LEVEL_ID) return false;
         if (index > LevelsMenu.LAST_LEVEL_ID) return false;

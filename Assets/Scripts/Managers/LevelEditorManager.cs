@@ -229,6 +229,7 @@ public class LevelEditorManager : MonoBehaviour
                 positions.Add(curPos);
             }
         }
-        SaveManager.SaveLevel(_height, _width, name, difficulty, tilesID, positions);
+        LevelData level = new(_height, _width, name, difficulty, tilesID, positions);
+        SaveManager.SaveLevel(level);
     }
 }

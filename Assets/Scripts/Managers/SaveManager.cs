@@ -39,12 +39,11 @@ public static class SaveManager
         return null;
     }
 
-    public static void SaveLevel(int height, int width, string name, int difficulty, List<int> tilesID, List<Vector2Int> positions)
+    public static void SaveLevel(LevelData level)
     {
         Directory.CreateDirectory(s_customLevelsPath);
-        LevelData level = new(height, width, name, difficulty, tilesID, positions);
         string json = JsonUtility.ToJson(level, true);
-        File.WriteAllText(s_customLevelsPath + name + ".json", json);
+        File.WriteAllText(s_customLevelsPath + level.Name + ".json", json);
     }
 
     public static LevelData LoadLevel(string name)
@@ -80,5 +79,30 @@ public static class SaveManager
         return levels;
     }
 
+    public static void SaveGameState(GameStateData gameState)
+    {
+        Directory.CreateDirectory(s_customLevelsPath);
+        string json = JsonUtility.ToJson(gameState, true);
+        File.WriteAllText(s_statePath, json);
+    }
+
+    public static GameStateData LoadGameState()
+    {
+        if (File.Exists(s_statePath))
+        {
+            string json = File.ReadAllText(s_statePath);
+            return JsonUtility.FromJson<GameStateData>(json);
+        }
+        Debug.Log($"Game state file not found in {s_statePath}!");
+        return null;
+    }
+
+    public static void DeleteGameState()
+    {
+        if (File.Exists(s_statePath)) File.Delete(s_statePath);
+        else Debug.Log($"Game state file not found in {s_statePath}!");
+    }
+
+    public static bool IsGameStateExists() => File.Exists(s_statePath);
     public static bool IsLevelExists(string name) => File.Exists(s_customLevelsPath + name + ".json");
 }

@@ -6234,6 +6234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308a618c0ef53f640b4af6775c20bb62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManagerPrefab: {fileID: 4584422579586143911, guid: 58b486d49b5e6f4499ce006a8f05c5bb, type: 3}
+  LoadButton: {fileID: 759792418}
 --- !u!225 &1608606873
 CanvasGroup:
   m_ObjectHideFlags: 0
