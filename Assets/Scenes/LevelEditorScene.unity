@@ -1692,7 +1692,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 386178275}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1425940482}
+        m_TargetAssemblyTypeName: LevelEditorUI, Assembly-CSharp
+        m_MethodName: GenerateMediumLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &386178275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4772,14 +4784,9 @@ MonoBehaviour:
   tilemap: {fileID: 487053944}
   selectionTilemap: {fileID: 582180567}
   floorTile: {fileID: 11400000, guid: 5d2a431c891040a41ae7fb5d4ee344ac, type: 2}
-  breakableWallTile: {fileID: 11400000, guid: 03044f56e23682e40954ac04b2df38b8, type: 2}
   unbreakableWallTile: {fileID: 11400000, guid: 79646e645ca6c794ca1f25a9d674ca9e, type: 2}
   finishTile: {fileID: 11400000, guid: f186646c0f85dfd41ae78ca884ccb09c, type: 2}
   startTile: {fileID: 11400000, guid: 4af66ecb0832fc64983396ccabd23083, type: 2}
-  redSlimeTile: {fileID: 11400000, guid: 742b7c8b00ce4374a94910153b5bb1f4, type: 2}
-  purpleSlimeTile: {fileID: 11400000, guid: 06b3a74b37682924ca723b55f88d6150, type: 2}
-  yellowSlimeTile: {fileID: 11400000, guid: 15b6b12e7f41d284fbfc01eec9499f64, type: 2}
-  blueSlimeTile: {fileID: 11400000, guid: 83fa9c00bb489c449a00fdfec99003ca, type: 2}
 --- !u!4 &946375010
 Transform:
   m_ObjectHideFlags: 0
@@ -6628,7 +6635,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.77747, y: 1}
+    m_SensorSize: {x: 1.7769477, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7320,7 +7327,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1613534002}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1425940482}
+        m_TargetAssemblyTypeName: LevelEditorUI, Assembly-CSharp
+        m_MethodName: GenerateEasyLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1613534002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9558,7 +9577,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2112814928}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1425940482}
+        m_TargetAssemblyTypeName: LevelEditorUI, Assembly-CSharp
+        m_MethodName: GenerateHardLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2112814928
 MonoBehaviour:
   m_ObjectHideFlags: 0

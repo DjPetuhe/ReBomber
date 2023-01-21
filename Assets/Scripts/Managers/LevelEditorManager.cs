@@ -232,4 +232,20 @@ public class LevelEditorManager : MonoBehaviour
         LevelData level = new(_height, _width, name, difficulty, tilesID, positions);
         SaveManager.SaveLevel(level);
     }
+
+    public void DisplayMatrix(List<List<int>> matrix)
+    {
+        for (int i = 0; i < _height; i++)
+        {
+            for (int j = 0; j < _width; j++)
+            {
+                Vector2Int currentPos = new()
+                {
+                    y = Mathf.RoundToInt(i - 1),
+                    x = Mathf.RoundToInt(j - 1)
+                };
+                tilemap.SetTile((Vector3Int)currentPos, _tileTransformer.TileToTileBase((Tile)matrix[i][j]));
+            }
+        }
+    }
 }

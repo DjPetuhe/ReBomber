@@ -146,4 +146,25 @@ public class LevelEditorUI : MonoBehaviour
         saveErrorField.GetComponent<TextMeshProUGUI>().text = result;
         saveErrorField.GetComponent<TextMeshProUGUI>().color =  correct? Color.green : Color.red;
     }
+
+    public void GenerateEasyLevel() => GenerateLevel(Difficulty.Easy);
+
+    public void GenerateMediumLevel() => GenerateLevel(Difficulty.Medium);
+
+    public void GenerateHardLevel() => GenerateLevel(Difficulty.Hard);
+
+    private void GenerateLevel(Difficulty dif)
+    {
+        int height = ValueToInt(heightField.GetComponent<TMP_InputField>().text);
+        int width = ValueToInt(widthField.GetComponent<TMP_InputField>().text);
+        if (height == 50) height--;
+        else if (height % 2 == 0) height++;
+        if (width == 50) width--;
+        else if (width % 2 == 0) width++;
+        _levelEditorManager.ResizeMap(height, width);
+        heightField.GetComponent<TMP_InputField>().text = height.ToString();
+        widthField.GetComponent<TMP_InputField>().text = width.ToString();
+        LevelGenerator lvlgen = new(height, width, dif);
+        _levelEditorManager.DisplayMatrix(lvlgen.MakeLevel());
+    }
 }

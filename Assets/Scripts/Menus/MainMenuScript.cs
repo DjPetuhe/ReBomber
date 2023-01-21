@@ -12,7 +12,7 @@ public class MainMenuScript : MonoBehaviour
 
     private void Start()
     {
-        if (SaveManager.IsGameStateExists()) LoadButton.interactable = true; 
+        if (SaveManager.IsGameStateExists()) LoadButton.interactable = true;
     }
 
     public void LoadLevelMenu() => SceneManager.LoadScene("LevelsMenuScene");

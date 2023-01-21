@@ -45,8 +45,16 @@ public class LevelUI : MonoBehaviour
         if (!_pauseEnabled) return;
         if (Input.GetKeyDown(pauseKey))
         {
-            if (_gameManager.State == GameState.Play) pauseButton.onClick.Invoke();
-            else if (_gameManager.State == GameState.Pause) resumeButton.onClick.Invoke();
+            if (_gameManager.State == GameState.Play)
+            {
+                pauseButton.onClick.Invoke();
+                _gameManager.State = GameState.Pause;
+            }
+            else if (_gameManager.State == GameState.Pause)
+            {
+                resumeButton.onClick.Invoke();
+                _gameManager.State = GameState.Play;
+            }
         }
     }
 
