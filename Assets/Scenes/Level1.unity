@@ -421,17 +421,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3298951201081635076, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
   m_PrefabInstance: {fileID: 3298951201757366302}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1011079760 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4584422579586143928, guid: 58b486d49b5e6f4499ce006a8f05c5bb, type: 3}
-  m_PrefabInstance: {fileID: 4584422578583555304}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb331910d8b3e234ea89bf4aaa874dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1057225238 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3298951201203909128, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
@@ -484,7 +473,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.77747, y: 1}
+    m_SensorSize: {x: 1.7769477, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3079,9 +3068,7 @@ MonoBehaviour:
   floorTile: {fileID: 11400000, guid: 5d2a431c891040a41ae7fb5d4ee344ac, type: 2}
   exitTile: {fileID: 11400000, guid: d1d2827abea6d6740b45e59cc3948bd1, type: 2}
   breakableWallTile: {fileID: 11400000, guid: 03044f56e23682e40954ac04b2df38b8, type: 2}
-  unbreakableWallTile: {fileID: 11400000, guid: 79646e645ca6c794ca1f25a9d674ca9e, type: 2}
   finishTile: {fileID: 11400000, guid: f186646c0f85dfd41ae78ca884ccb09c, type: 2}
-  startTile: {fileID: 11400000, guid: 4af66ecb0832fc64983396ccabd23083, type: 2}
   leftTopCoords: {x: -8, y: 5}
   rightBottomCoords: {x: 3, y: -6}
 --- !u!1001 &3298951201757366302
@@ -3194,13 +3181,36 @@ PrefabInstance:
     - target: {fileID: 3298951202425099619, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 1011079760}
+      objectReference: {fileID: 3298951201757366303}
+    - target: {fileID: 3298951202425099619, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Pause
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298951202425099619, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: LevelUI, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3298951202600997653, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 1011079760}
+      objectReference: {fileID: 3298951201757366303}
+    - target: {fileID: 3298951202600997653, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Resume
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
+--- !u!114 &3298951201757366303 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3298951201415646732, guid: 5b8944b8d0d14d14f9d9f1713de8b565, type: 3}
+  m_PrefabInstance: {fileID: 3298951201757366302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8bb1ca6ec518be42aa6f7d88a8aa053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4584422578583555304
 PrefabInstance:
   m_ObjectHideFlags: 0
